@@ -110,7 +110,7 @@ export default function DashboardPage() {
         {isLoading ? (
           <div className="space-y-3">
             {[1, 2].map((i) => (
-              <div key={i} className="h-24 animate-pulse rounded-lg bg-[var(--muted)]" />
+              <div key={i} className="h-24 animate-pulse rounded-2xl bg-[var(--muted)]" />
             ))}
           </div>
         ) : upcoming.length > 0 ? (
@@ -164,7 +164,7 @@ export default function DashboardPage() {
             })}
           </div>
         ) : (
-          <div className="rounded-lg border border-[var(--border)] p-8 text-center">
+          <div className="rounded-2xl border border-[var(--border)] p-8 text-center">
             <Calendar className="mx-auto h-12 w-12 text-[var(--muted-foreground)]" />
             <h3 className="mt-4 text-lg font-medium">Nenhum agendamento futuro</h3>
             <p className="mt-2 text-sm text-[var(--muted-foreground)]">

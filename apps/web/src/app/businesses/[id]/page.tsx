@@ -39,7 +39,7 @@ export default function BusinessDetailPage() {
         <div className="h-6 w-96 animate-pulse rounded bg-[var(--muted)]" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-32 animate-pulse rounded-lg bg-[var(--muted)]" />
+            <div key={i} className="h-32 animate-pulse rounded-2xl bg-[var(--muted)]" />
           ))}
         </div>
       </div>

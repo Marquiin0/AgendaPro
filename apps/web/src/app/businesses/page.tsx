@@ -65,7 +65,7 @@ export default function BusinessesPage() {
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="flex h-10 rounded-md border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
+          className="flex h-10 rounded-2xl border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
         >
           <option value="">Todas categorias</option>
           {categories?.map((cat) => (
@@ -81,7 +81,7 @@ export default function BusinessesPage() {
         {isLoading ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-48 animate-pulse rounded-lg bg-[var(--muted)]" />
+              <div key={i} className="h-48 animate-pulse rounded-2xl bg-[var(--muted)]" />
             ))}
           </div>
         ) : businesses && businesses.length > 0 ? (
@@ -118,7 +118,7 @@ export default function BusinessesPage() {
             ))}
           </div>
         ) : (
-          <div className="rounded-lg border border-[var(--border)] p-12 text-center">
+          <div className="rounded-2xl border border-[var(--border)] p-12 text-center">
             <Store className="mx-auto h-12 w-12 text-[var(--muted-foreground)]" />
             <h3 className="mt-4 text-lg font-medium">Nenhum negocio encontrado</h3>
             <p className="mt-2 text-sm text-[var(--muted-foreground)]">

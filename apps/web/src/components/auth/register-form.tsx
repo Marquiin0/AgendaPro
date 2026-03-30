@@ -96,13 +96,13 @@ export function RegisterForm() {
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
           {error && (
-            <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">
+            <div className="rounded-2xl bg-red-50 p-3 text-sm text-red-600">
               {error}
             </div>
           )}
 
           {/* Role Toggle */}
-          <div className="flex rounded-md border border-[var(--input)] overflow-hidden">
+          <div className="flex rounded-2xl border border-[var(--input)] overflow-hidden">
             <button
               type="button"
               className={`flex-1 py-2 text-sm font-medium transition-colors ${

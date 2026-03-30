@@ -117,7 +117,7 @@ export default function CalendarPage() {
               return (
                 <div
                   key={day}
-                  className={`min-h-[60px] sm:min-h-[80px] rounded-md border p-1 ${
+                  className={`min-h-[60px] sm:min-h-[80px] rounded-2xl border p-1 ${
                     isToday ? 'border-[var(--primary)] bg-[var(--primary)]/5' : 'border-[var(--border)]'
                   }`}
                 >

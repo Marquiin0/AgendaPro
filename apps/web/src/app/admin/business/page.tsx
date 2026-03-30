@@ -126,7 +126,7 @@ export default function BusinessPage() {
                 value={form.categoryId}
                 onChange={handleChange}
                 required
-                className="flex h-10 w-full rounded-md border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
+                className="flex h-10 w-full rounded-2xl border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
               >
                 <option value="">Selecione uma categoria</option>
                 {categories?.map((cat) => (
@@ -150,7 +150,7 @@ export default function BusinessPage() {
                 value={form.description}
                 onChange={handleChange}
                 rows={3}
-                className="flex w-full rounded-md border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
+                className="flex w-full rounded-2xl border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
               />
             </div>
 

@@ -435,7 +435,7 @@ export default function HomePage() {
                   </div>
                   <div className="space-y-2">
                     {['Corte Degrade - 30min', 'Barba Completa - 20min'].map((s) => (
-                      <div key={s} className="flex items-center gap-2 rounded-lg bg-[var(--primary)]/5 border border-[var(--primary)]/20 px-3 py-2">
+                      <div key={s} className="flex items-center gap-2 rounded-2xl bg-[var(--primary)]/5 border border-[var(--primary)]/20 px-3 py-2">
                         <CheckCircle2 className="h-4 w-4 text-[var(--primary)]" />
                         <span className="text-sm">{s}</span>
                       </div>
@@ -446,7 +446,7 @@ export default function HomePage() {
                       <div
                         key={t}
                         className={cn(
-                          'rounded-lg border text-center py-2 text-xs font-medium',
+                          'rounded-2xl border text-center py-2 text-xs font-medium',
                           i === 2
                             ? 'border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)]'
                             : 'border-[var(--border)]',
@@ -483,7 +483,7 @@ export default function HomePage() {
                       { client: 'Maria Santos', service: 'Luzes', time: '11:00', status: 'Pendente', color: 'bg-yellow-100 text-yellow-700' },
                       { client: 'Pedro Costa', service: 'Corte Social', time: '14:00', status: 'Confirmado', color: 'bg-green-100 text-green-700' },
                     ].map((a) => (
-                      <div key={a.client} className="flex items-center justify-between rounded-lg border border-[var(--border)] px-3 py-2">
+                      <div key={a.client} className="flex items-center justify-between rounded-2xl border border-[var(--border)] px-3 py-2">
                         <div>
                           <span className="text-sm font-medium">{a.client}</span>
                           <span className="text-xs text-[var(--muted-foreground)] ml-2">{a.service}</span>

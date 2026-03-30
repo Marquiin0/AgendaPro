@@ -197,7 +197,7 @@ export default function ServicesPage() {
       {isLoading ? (
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-20 animate-pulse rounded-lg bg-[var(--muted)]" />
+            <div key={i} className="h-20 animate-pulse rounded-2xl bg-[var(--muted)]" />
           ))}
         </div>
       ) : services && services.length > 0 ? (
@@ -231,7 +231,7 @@ export default function ServicesPage() {
           ))}
         </div>
       ) : (
-        <div className="rounded-lg border border-[var(--border)] p-8 text-center">
+        <div className="rounded-2xl border border-[var(--border)] p-8 text-center">
           <Scissors className="mx-auto h-12 w-12 text-[var(--muted-foreground)]" />
           <h3 className="mt-4 text-lg font-medium">Nenhum servico ainda</h3>
           <p className="mt-2 text-sm text-[var(--muted-foreground)]">
