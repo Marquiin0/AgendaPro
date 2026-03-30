@@ -180,7 +180,7 @@ export default function BookingPage() {
                   key={service.id}
                   onClick={() => toggleService(service)}
                   className={cn(
-                    'flex items-center justify-between rounded-xl border-2 p-4 cursor-pointer transition-all',
+                    'flex items-center justify-between rounded-2xl border-2 p-4 cursor-pointer transition-all',
                     selected
                       ? 'border-[var(--primary)] bg-[var(--primary)]/5'
                       : 'border-[var(--border)] hover:border-[var(--primary)]/40',
@@ -220,7 +220,7 @@ export default function BookingPage() {
 
           {/* Cart Summary */}
           {selectedServices.length > 0 && (
-            <div className="sticky bottom-4 mt-6 rounded-xl border-2 border-[var(--primary)] bg-[var(--background)] p-4 shadow-lg">
+            <div className="sticky bottom-4 mt-6 rounded-2xl border-2 border-[var(--primary)] bg-[var(--background)] p-4 shadow-lg">
               <div className="flex items-center justify-between mb-3">
                 <div>
                   <span className="text-sm font-medium">
@@ -269,7 +269,7 @@ export default function BookingPage() {
             <div
               key={member.id}
               className={cn(
-                'flex items-center gap-4 rounded-xl border-2 p-4 cursor-pointer transition-all',
+                'flex items-center gap-4 rounded-2xl border-2 p-4 cursor-pointer transition-all',
                 selectedStaff?.id === member.id
                   ? 'border-[var(--primary)] bg-[var(--primary)]/5'
                   : 'border-[var(--border)] hover:border-[var(--primary)]/40',
@@ -311,7 +311,7 @@ export default function BookingPage() {
                 <button
                   key={date}
                   className={cn(
-                    'flex flex-col items-center rounded-xl border-2 p-3 transition-all cursor-pointer',
+                    'flex flex-col items-center rounded-2xl border-2 p-3 transition-all cursor-pointer',
                     selectedDate === date
                       ? 'border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)]'
                       : 'border-[var(--border)] hover:border-[var(--primary)]/40',
@@ -346,7 +346,7 @@ export default function BookingPage() {
           {slotsLoading ? (
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                <div key={i} className="h-14 animate-pulse rounded-xl bg-[var(--muted)]" />
+                <div key={i} className="h-14 animate-pulse rounded-2xl bg-[var(--muted)]" />
               ))}
             </div>
           ) : availableSlots && availableSlots.length > 0 ? (
@@ -355,7 +355,7 @@ export default function BookingPage() {
                 <button
                   key={slot.startTime}
                   className={cn(
-                    'rounded-xl border-2 p-3 text-center transition-all',
+                    'rounded-2xl border-2 p-3 text-center transition-all',
                     selectedSlot?.startTime === slot.startTime
                       ? 'border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)]'
                       : 'border-[var(--border)] hover:border-[var(--primary)]/40',
@@ -368,7 +368,7 @@ export default function BookingPage() {
               ))}
             </div>
           ) : (
-            <div className="rounded-xl border border-[var(--border)] p-8 text-center">
+            <div className="rounded-2xl border border-[var(--border)] p-8 text-center">
               <p className="text-[var(--muted-foreground)]">
                 Nenhum horario disponivel nesta data. Tente outra data.
               </p>
@@ -439,7 +439,7 @@ export default function BookingPage() {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={2}
-              className="flex w-full rounded-xl border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
+              className="flex w-full rounded-2xl border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm"
               placeholder="Alguma observacao para o profissional..."
             />
           </div>
@@ -456,7 +456,7 @@ export default function BookingPage() {
             </Button>
           </div>
           {bookMutation.isError && (
-            <div className="rounded-xl bg-red-50 p-3 text-sm text-red-600">
+            <div className="rounded-2xl bg-red-50 p-3 text-sm text-red-600">
               {(bookMutation.error as Error)?.message || 'Erro ao agendar. Tente novamente.'}
             </div>
           )}

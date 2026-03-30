@@ -218,13 +218,13 @@ export default function HomePage() {
 
               <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link href="/register?role=ADMIN">
-                  <Button size="lg" className="w-full sm:w-auto text-base px-8 py-6 rounded-xl shadow-lg shadow-[var(--primary)]/25 hover:shadow-xl hover:shadow-[var(--primary)]/30 transition-all">
+                  <Button size="lg" className="w-full sm:w-auto text-base px-8 py-6 rounded-full shadow-lg shadow-[var(--primary)]/25 hover:shadow-xl hover:shadow-[var(--primary)]/30 transition-all">
                     Comece Gratis
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 <a href="#como-funciona">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-base px-8 py-6 rounded-xl">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-base px-8 py-6 rounded-full">
                     Veja como funciona
                   </Button>
                 </a>
@@ -275,7 +275,7 @@ export default function HomePage() {
                     <div
                       key={s.name}
                       className={cn(
-                        'flex items-center justify-between rounded-xl border-2 p-3 mb-2 transition-all',
+                        'flex items-center justify-between rounded-full border-2 p-3 mb-2 transition-all',
                         s.active ? 'border-[var(--primary)] bg-[var(--primary)]/5' : 'border-[var(--border)]',
                       )}
                     >
@@ -292,7 +292,7 @@ export default function HomePage() {
                     </div>
                   ))}
                   {/* Fake cart */}
-                  <div className="mt-3 rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)] p-3 text-center">
+                  <div className="mt-3 rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] p-3 text-center">
                     <span className="font-medium text-sm">2 servicos &middot; 50 min &middot; R$ 75,00</span>
                     <div className="text-xs opacity-80 mt-0.5">Continuar &rarr;</div>
                   </div>
@@ -316,7 +316,7 @@ export default function HomePage() {
           <div className="flex flex-wrap justify-center gap-6 sm:gap-10">
             {categories.map((cat) => (
               <div key={cat.label} className="flex flex-col items-center gap-2 group">
-                <div className="h-12 w-12 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center group-hover:border-[var(--primary)] group-hover:bg-[var(--primary)]/5 transition-all">
+                <div className="h-12 w-12 rounded-full bg-[var(--background)] border border-[var(--border)] flex items-center justify-center group-hover:border-[var(--primary)] group-hover:bg-[var(--primary)]/5 transition-all">
                   <cat.icon className="h-5 w-5 text-[var(--muted-foreground)] group-hover:text-[var(--primary)] transition-colors" />
                 </div>
                 <span className="text-xs font-medium text-[var(--muted-foreground)]">{cat.label}</span>
@@ -387,7 +387,7 @@ export default function HomePage() {
               <AnimatedSection key={feature.title} delay={i * 100}>
                 <Card className="h-full border-0 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
                   <CardContent className="p-6">
-                    <div className="h-12 w-12 rounded-xl bg-[var(--primary)]/10 flex items-center justify-center mb-4">
+                    <div className="h-12 w-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center mb-4">
                       <feature.icon className="h-6 w-6 text-[var(--primary)]" />
                     </div>
                     <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
@@ -471,7 +471,7 @@ export default function HomePage() {
                       { label: 'Agendamentos Hoje', value: '12' },
                       { label: 'Receita do Dia', value: 'R$ 540' },
                     ].map((s) => (
-                      <div key={s.label} className="rounded-xl border border-[var(--border)] p-3">
+                      <div key={s.label} className="rounded-full border border-[var(--border)] p-3">
                         <p className="text-xs text-[var(--muted-foreground)]">{s.label}</p>
                         <p className="text-xl font-bold">{s.value}</p>
                       </div>
@@ -522,7 +522,7 @@ export default function HomePage() {
                 <Card className="h-full border-0 shadow-sm overflow-hidden group hover:shadow-lg transition-all duration-300">
                   <div className={cn('h-2 bg-gradient-to-r', ind.color)} />
                   <CardContent className="p-6">
-                    <div className={cn('h-12 w-12 rounded-xl bg-gradient-to-r flex items-center justify-center mb-4 text-white', ind.color)}>
+                    <div className={cn('h-12 w-12 rounded-full bg-gradient-to-r flex items-center justify-center mb-4 text-white', ind.color)}>
                       <ind.icon className="h-6 w-6" />
                     </div>
                     <h3 className="text-lg font-bold mb-2">{ind.title}</h3>
@@ -597,13 +597,13 @@ export default function HomePage() {
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/register?role=ADMIN">
-                <Button size="lg" className="w-full sm:w-auto text-base px-8 py-6 rounded-xl bg-white text-[var(--primary)] hover:bg-white/90 shadow-lg">
+                <Button size="lg" className="w-full sm:w-auto text-base px-8 py-6 rounded-full bg-white text-[var(--primary)] hover:bg-white/90 shadow-lg">
                   Sou Dono de Negocio
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
               <Link href="/register?role=CLIENT">
-                <Button size="lg" className="w-full sm:w-auto text-base px-8 py-6 rounded-xl bg-white/20 text-white border-2 border-white/50 hover:bg-white/30 backdrop-blur">
+                <Button size="lg" className="w-full sm:w-auto text-base px-8 py-6 rounded-full bg-white/20 text-white border-2 border-white/50 hover:bg-white/30 backdrop-blur">
                   Sou Cliente
                 </Button>
               </Link>
