@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/providers/auth-provider';
 import { QueryProvider } from '@/providers/query-provider';
+import { ThemeProvider } from '@/providers/theme-provider';
 import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 
@@ -19,8 +20,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <body className={inter.className}>
+        <ThemeProvider>
         <AuthProvider>
           <QueryProvider>
             <div className="flex min-h-screen flex-col">
@@ -30,6 +32,7 @@ export default function RootLayout({
             </div>
           </QueryProvider>
         </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

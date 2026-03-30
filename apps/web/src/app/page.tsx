@@ -603,7 +603,7 @@ export default function HomePage() {
                 </Button>
               </Link>
               <Link href="/register?role=CLIENT">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto text-base px-8 py-6 rounded-xl border-white/30 text-white hover:bg-white/10">
+                <Button size="lg" className="w-full sm:w-auto text-base px-8 py-6 rounded-xl bg-white/20 text-white border-2 border-white/50 hover:bg-white/30 backdrop-blur">
                   Sou Cliente
                 </Button>
               </Link>
