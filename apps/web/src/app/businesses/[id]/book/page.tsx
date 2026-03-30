@@ -7,7 +7,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { ArrowLeft, ArrowRight, Check, Clock, Calendar, User, Scissors } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 interface Service {

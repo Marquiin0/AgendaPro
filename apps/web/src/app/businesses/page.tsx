@@ -6,7 +6,6 @@ import { api } from '@/lib/api';
 import Link from 'next/link';
 import { Search, MapPin, Store } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface Category {

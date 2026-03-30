@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 import Link from 'next/link';
 import { MapPin, Phone, Mail, Scissors, Users, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface Business {
   id: string;
