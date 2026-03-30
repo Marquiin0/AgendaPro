@@ -6,8 +6,13 @@ export default withAuth(
     const token = req.nextauth.token;
     const pathname = req.nextUrl.pathname;
 
-    // Admin routes require ADMIN role
-    if (pathname.startsWith('/admin') && token?.role !== 'ADMIN') {
+    // Super Admin routes require SUPER_ADMIN role
+    if (pathname.startsWith('/super-admin') && token?.role !== 'SUPER_ADMIN') {
+      return NextResponse.redirect(new URL('/dashboard', req.url));
+    }
+
+    // Admin routes require ADMIN or SUPER_ADMIN role
+    if (pathname.startsWith('/admin') && token?.role !== 'ADMIN' && token?.role !== 'SUPER_ADMIN') {
       return NextResponse.redirect(new URL('/dashboard', req.url));
     }
 
@@ -21,5 +26,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/admin/:path*', '/settings/:path*'],
+  matcher: ['/dashboard/:path*', '/admin/:path*', '/super-admin/:path*', '/settings/:path*'],
 };

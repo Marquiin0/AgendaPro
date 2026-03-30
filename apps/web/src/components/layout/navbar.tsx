@@ -34,7 +34,8 @@ export function Navbar() {
   const { data: session } = useSession();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const dashboardLink = session?.user?.role === 'ADMIN' ? '/admin' : '/dashboard';
+  const role = session?.user?.role;
+  const dashboardLink = role === 'SUPER_ADMIN' ? '/super-admin' : role === 'ADMIN' ? '/admin' : '/dashboard';
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-[var(--border)]/40 bg-[var(--background)]/70 backdrop-blur-xl">

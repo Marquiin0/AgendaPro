@@ -448,18 +448,18 @@ export default function HomePage() {
           <div className="grid gap-6 md:grid-cols-3">
             {testimonials.map((t, i) => (
               <AnimatedSection key={t.name} delay={i * 150}>
-                <Card className="h-full border-0 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                  <CardContent className="p-6">
+                <Card className="h-full border-0 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                  <CardContent className="p-6 flex flex-col flex-1">
                     <div className="flex gap-1 mb-4">
                       {Array.from({ length: t.rating }).map((_, j) => (
                         <Star key={j} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                       ))}
                     </div>
-                    <p className="text-sm text-[var(--muted-foreground)] mb-6 leading-relaxed italic">
+                    <p className="text-sm text-[var(--muted-foreground)] mb-6 leading-relaxed italic flex-1">
                       &ldquo;{t.text}&rdquo;
                     </p>
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-[var(--primary)] flex items-center justify-center text-[var(--primary-foreground)] font-bold text-sm">
+                    <div className="flex items-center gap-3 mt-auto">
+                      <div className="h-10 w-10 rounded-full bg-[var(--primary)] flex items-center justify-center text-[var(--primary-foreground)] font-bold text-sm shrink-0">
                         {t.name.split(' ').map((n) => n[0]).join('')}
                       </div>
                       <div>

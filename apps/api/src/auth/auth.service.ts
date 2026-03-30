@@ -2,6 +2,7 @@ import {
   Injectable,
   ConflictException,
   UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -23,6 +24,10 @@ export class AuthService {
 
     if (existing) {
       throw new ConflictException('Email já está em uso');
+    }
+
+    if (dto.role === 'SUPER_ADMIN') {
+      throw new ForbiddenException('Não é permitido registrar como SUPER_ADMIN');
     }
 
     const passwordHash = await bcrypt.hash(dto.password, 10);

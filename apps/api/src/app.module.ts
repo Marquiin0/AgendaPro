@@ -10,6 +10,7 @@ import { StaffModule } from './staff/staff.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { AvailabilityModule } from './availability/availability.module';
 import { AppointmentsModule } from './appointments/appointments.module';
+import { SuperAdminModule } from './super-admin/super-admin.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AppointmentsModule } from './appointments/appointments.module';
     SchedulesModule,
     AvailabilityModule,
     AppointmentsModule,
+    SuperAdminModule,
   ],
 })
 export class AppModule {}

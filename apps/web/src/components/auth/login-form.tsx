@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { signIn, getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -34,7 +34,16 @@ export function LoginForm() {
       return;
     }
 
-    router.push('/dashboard');
+    const session = await getSession();
+    const role = session?.user?.role;
+
+    if (role === 'SUPER_ADMIN') {
+      router.push('/super-admin');
+    } else if (role === 'ADMIN') {
+      router.push('/admin');
+    } else {
+      router.push('/dashboard');
+    }
     router.refresh();
   }
 
