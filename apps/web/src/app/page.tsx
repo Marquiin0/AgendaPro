@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useScrollAnimation } from '@/hooks/use-scroll-animation';
+import { useParallax } from '@/hooks/use-parallax';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 
@@ -35,6 +36,94 @@ function AnimatedSection({
       style={{ transitionDelay: `${delay}ms` }}
     >
       {children}
+    </div>
+  );
+}
+
+// ─── Parallax Floating Icons (decorative) ───
+function FloatingIcons({ scrollY }: { scrollY: number }) {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10" aria-hidden>
+      {/* Calendar icon top-left */}
+      <div
+        className="absolute top-[10%] left-[5%] opacity-[0.07]"
+        style={{ transform: `translateY(${scrollY * 0.08}px) rotate(${scrollY * 0.02}deg)` }}
+      >
+        <Calendar className="h-24 w-24 sm:h-32 sm:w-32" />
+      </div>
+      {/* Clock icon right */}
+      <div
+        className="absolute top-[30%] right-[8%] opacity-[0.05]"
+        style={{ transform: `translateY(${scrollY * -0.06}px) rotate(${scrollY * -0.015}deg)` }}
+      >
+        <Clock className="h-20 w-20 sm:h-28 sm:w-28" />
+      </div>
+      {/* Scissors bottom-left */}
+      <div
+        className="absolute top-[55%] left-[3%] opacity-[0.06]"
+        style={{ transform: `translateY(${scrollY * 0.04}px) rotate(${scrollY * 0.01}deg)` }}
+      >
+        <Scissors className="h-16 w-16 sm:h-24 sm:w-24" />
+      </div>
+      {/* Users icon mid-right */}
+      <div
+        className="absolute top-[70%] right-[5%] opacity-[0.05]"
+        style={{ transform: `translateY(${scrollY * -0.05}px)` }}
+      >
+        <Users className="h-20 w-20 sm:h-28 sm:w-28" />
+      </div>
+      {/* Store bottom */}
+      <div
+        className="absolute top-[85%] left-[15%] opacity-[0.04]"
+        style={{ transform: `translateY(${scrollY * 0.03}px) rotate(${scrollY * -0.01}deg)` }}
+      >
+        <Store className="h-20 w-20 sm:h-24 sm:w-24" />
+      </div>
+    </div>
+  );
+}
+
+// ─── Section Divider with parallax wave ───
+function ParallaxDivider({ scrollY, variant = 'wave' }: { scrollY: number; variant?: 'wave' | 'dots' | 'gradient' }) {
+  if (variant === 'dots') {
+    return (
+      <div className="relative h-24 flex items-center justify-center overflow-hidden">
+        <div className="flex gap-3" style={{ transform: `translateX(${scrollY * -0.03}px)` }}>
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-2 w-2 rounded-full bg-[var(--primary)]"
+              style={{ opacity: 0.1 + (i % 5) * 0.05 }}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+  if (variant === 'gradient') {
+    return (
+      <div className="relative h-32 overflow-hidden">
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--primary)]/10 to-transparent"
+          style={{ transform: `scaleX(${1 + scrollY * 0.0002})` }}
+        />
+      </div>
+    );
+  }
+  // wave
+  return (
+    <div className="relative h-20 overflow-hidden">
+      <svg
+        viewBox="0 0 1440 80"
+        className="absolute bottom-0 w-full h-full text-[var(--muted)]/30"
+        preserveAspectRatio="none"
+        style={{ transform: `translateX(${scrollY * -0.02}px)` }}
+      >
+        <path
+          fill="currentColor"
+          d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80 Z"
+        />
+      </svg>
     </div>
   );
 }
@@ -184,14 +273,25 @@ const testimonials = [
 ];
 
 export default function HomePage() {
+  const scrollY = useParallax();
+
   return (
-    <div className="flex flex-col overflow-hidden">
+    <div className="relative flex flex-col overflow-hidden">
+      {/* Global floating icons with parallax */}
+      <FloatingIcons scrollY={scrollY} />
 
       {/* ══════════ 1. HERO ══════════ */}
       <section className="relative px-4 pt-16 pb-20 sm:pt-24 sm:pb-32 overflow-hidden">
-        {/* Background gradient */}
+        {/* Background gradient with parallax */}
         <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-transparent to-[var(--primary)]/10 -z-10" />
-        <div className="absolute top-20 right-0 w-[500px] h-[500px] rounded-full bg-[var(--primary)]/5 blur-3xl -z-10" />
+        <div
+          className="absolute top-20 right-0 w-[500px] h-[500px] rounded-full bg-[var(--primary)]/5 blur-3xl -z-10"
+          style={{ transform: `translateY(${scrollY * 0.15}px)` }}
+        />
+        <div
+          className="absolute -bottom-20 -left-20 w-[400px] h-[400px] rounded-full bg-blue-400/5 blur-3xl -z-10"
+          style={{ transform: `translateY(${scrollY * -0.1}px)` }}
+        />
 
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
@@ -216,15 +316,15 @@ export default function HomePage() {
                 estudios e muito mais. Seus clientes agendam 24/7 enquanto voce foca no que importa.
               </p>
 
-              <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
                 <Link href="/register?role=ADMIN">
-                  <Button size="lg" className="w-full sm:w-auto text-base px-8 py-6 rounded-full shadow-lg shadow-[var(--primary)]/25 hover:shadow-xl hover:shadow-[var(--primary)]/30 transition-all">
+                  <Button size="lg" className="w-full sm:w-auto text-base h-14 px-8 rounded-full shadow-lg shadow-[var(--primary)]/25 hover:shadow-xl hover:shadow-[var(--primary)]/30 transition-all">
                     Comece Gratis
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 <a href="#como-funciona">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-base px-8 py-6 rounded-full">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-base h-14 px-8 rounded-full">
                     Veja como funciona
                   </Button>
                 </a>
@@ -307,6 +407,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      <ParallaxDivider scrollY={scrollY} variant="gradient" />
+
       {/* ══════════ 2. TRUST BAR ══════════ */}
       <section className="border-y border-[var(--border)] bg-[var(--muted)]/50 py-8">
         <div className="mx-auto max-w-7xl px-4">
@@ -325,6 +427,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <ParallaxDivider scrollY={scrollY} variant="dots" />
 
       {/* ══════════ 3. COMO FUNCIONA ══════════ */}
       <section id="como-funciona" className="px-4 py-20 sm:py-28">
@@ -370,6 +474,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      <ParallaxDivider scrollY={scrollY} variant="wave" />
+
       {/* ══════════ 4. FEATURES ══════════ */}
       <section className="px-4 py-20 bg-[var(--muted)]/50">
         <div className="mx-auto max-w-7xl">
@@ -399,6 +505,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <ParallaxDivider scrollY={scrollY} variant="dots" />
 
       {/* ══════════ 5. PREVIEW / DEMO ══════════ */}
       <section className="px-4 py-20 sm:py-28">
@@ -504,6 +612,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      <ParallaxDivider scrollY={scrollY} variant="gradient" />
+
       {/* ══════════ 6. PARA QUEM E ══════════ */}
       <section className="px-4 py-20 bg-[var(--muted)]/50">
         <div className="mx-auto max-w-7xl">
@@ -516,18 +626,18 @@ export default function HomePage() {
             </h2>
           </AnimatedSection>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 items-stretch">
             {industries.map((ind, i) => (
-              <AnimatedSection key={ind.title} delay={i * 100}>
-                <Card className="h-full border-0 shadow-sm overflow-hidden group hover:shadow-lg transition-all duration-300">
-                  <div className={cn('h-2 bg-gradient-to-r', ind.color)} />
-                  <CardContent className="p-6">
+              <AnimatedSection key={ind.title} delay={i * 100} className="h-full">
+                <Card className="h-full border-0 shadow-sm overflow-hidden group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                  <div className={cn('h-1.5 bg-gradient-to-r', ind.color)} />
+                  <CardContent className="p-6 flex flex-col flex-1">
                     <div className={cn('h-12 w-12 rounded-full bg-gradient-to-r flex items-center justify-center mb-4 text-white', ind.color)}>
                       <ind.icon className="h-6 w-6" />
                     </div>
                     <h3 className="text-lg font-bold mb-2">{ind.title}</h3>
-                    <p className="text-sm text-[var(--muted-foreground)] mb-4">{ind.desc}</p>
-                    <Link href="/register?role=ADMIN" className="inline-flex items-center text-sm font-medium text-[var(--primary)] hover:gap-2 transition-all">
+                    <p className="text-sm text-[var(--muted-foreground)] mb-4 flex-1">{ind.desc}</p>
+                    <Link href="/register?role=ADMIN" className="inline-flex items-center text-sm font-medium text-[var(--primary)] hover:gap-2 transition-all mt-auto">
                       Comece agora <ChevronRight className="h-4 w-4 ml-1" />
                     </Link>
                   </CardContent>
@@ -537,6 +647,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <ParallaxDivider scrollY={scrollY} variant="wave" />
 
       {/* ══════════ 7. DEPOIMENTOS ══════════ */}
       <section className="px-4 py-20 sm:py-28">
@@ -585,6 +697,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      <ParallaxDivider scrollY={scrollY} variant="dots" />
+
       {/* ══════════ 8. CTA FINAL ══════════ */}
       <section className="px-4 py-20 sm:py-28">
         <AnimatedSection>
@@ -595,15 +709,15 @@ export default function HomePage() {
             <p className="mt-4 text-lg opacity-90 max-w-xl mx-auto">
               Crie sua conta gratis em menos de 2 minutos e comece a receber agendamentos hoje.
             </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/register?role=ADMIN">
-                <Button size="lg" className="w-full sm:w-auto text-base px-8 py-6 rounded-full bg-white text-[var(--primary)] hover:bg-white/90 shadow-lg">
+                <Button size="lg" className="w-full sm:w-auto text-base h-14 px-8 rounded-full bg-white text-[var(--primary)] hover:bg-white/90 shadow-lg">
                   Sou Dono de Negocio
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
               <Link href="/register?role=CLIENT">
-                <Button size="lg" className="w-full sm:w-auto text-base px-8 py-6 rounded-full bg-white/20 text-white border-2 border-white/50 hover:bg-white/30 backdrop-blur">
+                <Button size="lg" className="w-full sm:w-auto text-base h-14 px-8 rounded-full bg-white/20 text-white border-2 border-white/50 hover:bg-white/30 backdrop-blur">
                   Sou Cliente
                 </Button>
               </Link>
