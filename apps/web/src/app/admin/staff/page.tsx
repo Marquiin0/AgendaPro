@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { maskPhone, unmaskDigits } from '@/lib/masks';
 
 interface Schedule {
   dayOfWeek: string;
@@ -66,7 +67,14 @@ export default function StaffPage() {
 
   const createMutation = useMutation({
     mutationFn: (data: typeof form) =>
-      api(`/businesses/${business?.id}/staff`, { method: 'POST', token, body: JSON.stringify(data) }),
+      api(`/businesses/${business?.id}/staff`, {
+        method: 'POST',
+        token,
+        body: JSON.stringify({
+          ...data,
+          phone: unmaskDigits(data.phone) || undefined,
+        }),
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['staff'] });
       setShowForm(false);
@@ -163,7 +171,11 @@ export default function StaffPage() {
                 </div>
                 <div className="space-y-2">
                   <Label>Telefone</Label>
-                  <Input value={form.phone} onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))} />
+                  <Input
+                    value={form.phone}
+                    onChange={(e) => setForm((p) => ({ ...p, phone: maskPhone(e.target.value) }))}
+                    placeholder="(11) 99999-9999"
+                  />
                 </div>
               </div>
               <div className="flex gap-2">

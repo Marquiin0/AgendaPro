@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { maskCurrency, unmaskCurrency } from '@/lib/masks';
 
 interface Service {
   id: string;
@@ -24,7 +25,7 @@ interface Business {
   name: string;
 }
 
-const emptyForm = { name: '', description: '', durationMin: 30, price: 0 };
+const emptyForm = { name: '', description: '', durationMin: 30, price: '0,00' };
 
 export default function ServicesPage() {
   const { data: session } = useSession();
@@ -52,7 +53,10 @@ export default function ServicesPage() {
       api(`/businesses/${business?.id}/services`, {
         method: 'POST',
         token,
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          price: unmaskCurrency(data.price),
+        }),
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['services'] });
@@ -66,7 +70,10 @@ export default function ServicesPage() {
       api(`/businesses/${business?.id}/services/${id}`, {
         method: 'PATCH',
         token,
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          price: unmaskCurrency(data.price),
+        }),
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['services'] });
@@ -99,7 +106,7 @@ export default function ServicesPage() {
       name: service.name,
       description: service.description || '',
       durationMin: service.durationMin,
-      price: parseFloat(service.price),
+      price: parseFloat(service.price).toFixed(2).replace('.', ','),
     });
     setShowForm(true);
   }
@@ -169,16 +176,18 @@ export default function ServicesPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="price">Preco (R$)</Label>
-                  <Input
-                    id="price"
-                    type="number"
-                    step="0.01"
-                    min={0}
-                    value={form.price}
-                    onChange={(e) => setForm((p) => ({ ...p, price: parseFloat(e.target.value) }))}
-                    required
-                  />
+                  <Label htmlFor="price">Preço (R$)</Label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[var(--muted-foreground)]">R$</span>
+                    <Input
+                      id="price"
+                      value={form.price}
+                      onChange={(e) => setForm((p) => ({ ...p, price: maskCurrency(e.target.value) }))}
+                      required
+                      className="pl-11"
+                      placeholder="0,00"
+                    />
+                  </div>
                 </div>
               </div>
               <div className="flex gap-2">

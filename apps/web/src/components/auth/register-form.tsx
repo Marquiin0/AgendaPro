@@ -1,15 +1,41 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { maskPhone, unmaskDigits } from '@/lib/masks';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+
+type PasswordStrength = 'fraca' | 'media' | 'forte' | 'muito-forte';
+
+function getPasswordStrength(password: string): { level: PasswordStrength; score: number } {
+  if (!password) return { level: 'fraca', score: 0 };
+  let score = 0;
+  if (password.length >= 6) score++;
+  if (password.length >= 8) score++;
+  if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
+  if (/\d/.test(password)) score++;
+  if (/[^a-zA-Z0-9]/.test(password)) score++;
+
+  if (score <= 1) return { level: 'fraca', score: 1 };
+  if (score <= 2) return { level: 'media', score: 2 };
+  if (score <= 3) return { level: 'forte', score: 3 };
+  return { level: 'muito-forte', score: 4 };
+}
+
+const strengthConfig: Record<PasswordStrength, { label: string; color: string; bg: string }> = {
+  'fraca': { label: 'Fraca', color: 'bg-red-500', bg: 'text-red-500' },
+  'media': { label: 'Média', color: 'bg-yellow-500', bg: 'text-yellow-500' },
+  'forte': { label: 'Forte', color: 'bg-blue-500', bg: 'text-blue-500' },
+  'muito-forte': { label: 'Muito Forte', color: 'bg-green-500', bg: 'text-green-500' },
+};
 
 export function RegisterForm() {
   const router = useRouter();
@@ -27,9 +53,18 @@ export function RegisterForm() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const passwordStrength = useMemo(() => getPasswordStrength(formData.password), [formData.password]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  function handlePhoneChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const masked = maskPhone(e.target.value);
+    setFormData((prev) => ({ ...prev, phone: masked }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -37,7 +72,7 @@ export function RegisterForm() {
     setError('');
 
     if (formData.password !== formData.confirmPassword) {
-      setError('As senhas nao coincidem');
+      setError('As senhas não coincidem');
       return;
     }
 
@@ -51,7 +86,7 @@ export function RegisterForm() {
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
-          phone: formData.phone || undefined,
+          phone: unmaskDigits(formData.phone) || undefined,
           password: formData.password,
           role: formData.role,
         }),
@@ -89,7 +124,7 @@ export function RegisterForm() {
         <CardTitle className="text-2xl">Criar Conta</CardTitle>
         <CardDescription>
           {formData.role === 'ADMIN'
-            ? 'Cadastre-se como dono de negocio'
+            ? 'Cadastre-se como dono de negócio'
             : 'Cadastre-se como cliente'}
         </CardDescription>
       </CardHeader>
@@ -123,7 +158,7 @@ export function RegisterForm() {
               }`}
               onClick={() => setFormData((prev) => ({ ...prev, role: 'ADMIN' }))}
             >
-              Sou Dono de Negocio
+              Sou Dono de Negócio
             </button>
           </div>
 
@@ -173,36 +208,83 @@ export function RegisterForm() {
               type="tel"
               placeholder="(11) 99999-9999"
               value={formData.phone}
-              onChange={handleChange}
+              onChange={handlePhoneChange}
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="password">Senha</Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Minimo 6 caracteres"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              minLength={6}
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Mínimo 6 caracteres"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                minLength={6}
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors"
+                tabIndex={-1}
+                aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
+            {/* Password Strength Indicator */}
+            {formData.password && (
+              <div className="space-y-1.5 mt-2">
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className={`h-1.5 flex-1 rounded-full transition-colors ${
+                        i <= passwordStrength.score
+                          ? strengthConfig[passwordStrength.level].color
+                          : 'bg-[var(--muted)]'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <p className={`text-xs ${strengthConfig[passwordStrength.level].bg}`}>
+                  Força: {strengthConfig[passwordStrength.level].label}
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="confirmPassword">Confirmar Senha</Label>
-            <Input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              placeholder="Repita a senha"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-              minLength={6}
-            />
+            <div className="relative">
+              <Input
+                id="confirmPassword"
+                name="confirmPassword"
+                type={showConfirmPassword ? 'text' : 'password'}
+                placeholder="Repita a senha"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+                minLength={6}
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors"
+                tabIndex={-1}
+                aria-label={showConfirmPassword ? 'Ocultar senha' : 'Mostrar senha'}
+              >
+                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
+            {formData.confirmPassword && formData.password !== formData.confirmPassword && (
+              <p className="text-xs text-red-500 mt-1">As senhas não coincidem</p>
+            )}
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
@@ -210,7 +292,7 @@ export function RegisterForm() {
             {loading ? 'Criando conta...' : 'Criar Conta'}
           </Button>
           <p className="text-sm text-center text-[var(--muted-foreground)]">
-            Ja tem uma conta?{' '}
+            Já tem uma conta?{' '}
             <Link href="/login" className="text-[var(--primary)] hover:underline">
               Entrar
             </Link>

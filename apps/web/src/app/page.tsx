@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Calendar, Store, Clock, Users, ArrowRight, Scissors, Stethoscope,
   Camera, Briefcase, Dumbbell, Sparkles, CheckCircle2, Star,
@@ -109,10 +110,12 @@ const features = [
 ];
 
 const industries = [
-  { icon: Scissors, title: 'Barbearias', desc: 'Cortes, barbas e luzes agendados sem dor de cabeca. Seus clientes escolhem o barbeiro e o servico.', color: 'from-blue-500 to-blue-600' },
-  { icon: Stethoscope, title: 'Clinicas', desc: 'Consultas organizadas com horarios definidos por especialidade e profissional.', color: 'from-green-500 to-green-600' },
-  { icon: Camera, title: 'Estudios', desc: 'Sessoes de foto, video ou gravacao sem conflitos de agenda entre projetos.', color: 'from-purple-500 to-purple-600' },
-  { icon: Briefcase, title: 'Consultorias', desc: 'Reunioes e mentorias agendadas no horario perfeito para ambos os lados.', color: 'from-orange-500 to-orange-600' },
+  { icon: Scissors, title: 'Barbearias', desc: 'Cortes, barbas e luzes agendados sem dor de cabeca. Seus clientes escolhem o barbeiro e o servico.', color: 'from-blue-500 to-blue-600', image: '/images/Barbearia.png' },
+  { icon: Stethoscope, title: 'Clinicas', desc: 'Consultas organizadas com horarios definidos por especialidade e profissional.', color: 'from-green-500 to-green-600', image: '/images/Clinica.png' },
+  { icon: Camera, title: 'Estudios', desc: 'Sessoes de foto, video ou gravacao sem conflitos de agenda entre projetos.', color: 'from-purple-500 to-purple-600', image: '/images/Estudio.png' },
+  { icon: Briefcase, title: 'Consultorias', desc: 'Reunioes e mentorias agendadas no horario perfeito para ambos os lados.', color: 'from-orange-500 to-orange-600', image: '/images/Consultoria.png' },
+  { icon: Dumbbell, title: 'Academias', desc: 'Aulas, personal trainers e avaliacoes agendadas com controle total da grade horaria.', color: 'from-sky-500 to-sky-600', image: '/images/Academia.png' },
+  { icon: Sparkles, title: 'Spas', desc: 'Massagens, tratamentos e terapias organizados com horarios por profissional e sala.', color: 'from-pink-500 to-pink-600', image: '/images/Spa.png' },
 ];
 
 const testimonials = [
@@ -196,41 +199,20 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Hero Visual */}
+            {/* Hero Visual - Mockup */}
             <div className="flex-1 w-full max-w-lg lg:max-w-xl animate-[fadeSlideUp_1s_ease-out]">
               <div className="relative">
-                <div className="animate-[float_6s_ease-in-out_infinite] rounded-2xl border border-[var(--border)]/60 bg-[var(--card)]/80 backdrop-blur-xl shadow-2xl p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="h-3 w-3 rounded-full bg-red-400" />
-                    <div className="h-3 w-3 rounded-full bg-yellow-400" />
-                    <div className="h-3 w-3 rounded-full bg-green-400" />
-                    <span className="ml-2 text-xs text-[var(--muted-foreground)]">agendapro.com/booking</span>
-                  </div>
-                  <h3 className="font-bold text-lg mb-3">Escolha os servicos</h3>
-                  {[
-                    { name: 'Corte Degrade', time: '30 min', price: 'R$ 45', active: true },
-                    { name: 'Barba Completa', time: '20 min', price: 'R$ 30', active: true },
-                    { name: 'Luzes', time: '60 min', price: 'R$ 120', active: false },
-                  ].map((s) => (
-                    <div key={s.name} className={cn('flex items-center justify-between rounded-full border-2 p-3 mb-2', s.active ? 'border-[var(--primary)] bg-[var(--primary)]/5' : 'border-[var(--border)]')}>
-                      <div>
-                        <span className="font-medium text-sm">{s.name}</span>
-                        <span className="text-xs text-[var(--muted-foreground)] ml-2">{s.time}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-[var(--primary)]">{s.price}</span>
-                        <div className={cn('w-10 h-6 rounded-full', s.active ? 'bg-[var(--primary)]' : 'bg-gray-300')}>
-                          <div className={cn('h-5 w-5 rounded-full bg-white shadow mt-0.5', s.active ? 'translate-x-4' : 'translate-x-0.5')} />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  <div className="mt-3 rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] p-3 text-center">
-                    <span className="font-medium text-sm">2 servicos &middot; 50 min &middot; R$ 75,00</span>
-                    <div className="text-xs opacity-80 mt-0.5">Continuar &rarr;</div>
-                  </div>
+                <div className="animate-[float_6s_ease-in-out_infinite]">
+                  <Image
+                    src="/images/MockupAgendaPro.png"
+                    alt="AgendaPro - Painel Administrativo e App Mobile"
+                    width={1400}
+                    height={900}
+                    className="rounded-2xl drop-shadow-2xl"
+                    priority
+                  />
                 </div>
-                {/* Glow behind card */}
+                {/* Glow behind mockup */}
                 <div className="absolute inset-0 rounded-2xl bg-[var(--primary)]/10 blur-2xl -z-10 animate-[pulse_4s_ease-in-out_infinite]" />
               </div>
             </div>
@@ -423,14 +405,22 @@ export default function HomePage() {
             <h2 className="text-3xl sm:text-4xl font-bold">Feito para o seu tipo de negocio</h2>
           </AnimatedSection>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 items-stretch">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 items-stretch">
             {industries.map((ind, i) => (
               <AnimatedSection key={ind.title} delay={i * 100} className="h-full">
                 <Card className="h-full border-0 shadow-sm overflow-hidden group hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col">
-                  <div className={cn('h-1.5 bg-gradient-to-r transition-all duration-300 group-hover:h-2', ind.color)} />
+                  <div className="relative h-44 overflow-hidden">
+                    <Image
+                      src={ind.image}
+                      alt={ind.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className={cn('absolute inset-0 bg-gradient-to-t from-black/40 to-transparent')} />
+                  </div>
                   <CardContent className="p-6 flex flex-col flex-1">
-                    <div className={cn('h-12 w-12 rounded-full bg-gradient-to-r flex items-center justify-center mb-4 text-white group-hover:scale-110 transition-transform duration-300', ind.color)}>
-                      <ind.icon className="h-6 w-6" />
+                    <div className={cn('h-10 w-10 rounded-full bg-gradient-to-r flex items-center justify-center mb-3 text-white -mt-10 relative z-10 ring-4 ring-[var(--card)] group-hover:scale-110 transition-transform duration-300', ind.color)}>
+                      <ind.icon className="h-5 w-5" />
                     </div>
                     <h3 className="text-lg font-bold mb-2">{ind.title}</h3>
                     <p className="text-sm text-[var(--muted-foreground)] mb-4 flex-1">{ind.desc}</p>
