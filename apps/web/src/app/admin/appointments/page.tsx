@@ -7,14 +7,22 @@ import { Calendar, Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
+interface AppointmentService {
+  serviceName: string;
+  durationMin: number;
+  price: string;
+}
+
 interface Appointment {
   id: string;
   startTime: string;
   endTime: string;
+  totalDuration: number;
+  totalPrice: string;
   status: string;
   notes: string | null;
   client: { id: string; firstName: string; lastName: string; email: string; phone: string | null };
-  service: { name: string; durationMin: number; price: string };
+  services: AppointmentService[];
   staff: { firstName: string; lastName: string };
 }
 
@@ -59,16 +67,13 @@ export default function AdminAppointmentsPage() {
 
   function formatDate(dateStr: string) {
     return new Date(dateStr).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
+      day: '2-digit', month: '2-digit', year: 'numeric',
     });
   }
 
   function formatTime(dateStr: string) {
     return new Date(dateStr).toLocaleTimeString('pt-BR', {
-      hour: '2-digit',
-      minute: '2-digit',
+      hour: '2-digit', minute: '2-digit',
     });
   }
 
@@ -84,54 +89,55 @@ export default function AdminAppointmentsPage() {
         </div>
       ) : appointments && appointments.length > 0 ? (
         <div className="space-y-3">
-          {appointments.map((appt) => (
-            <Card key={appt.id}>
-              <CardContent className="p-4">
-                <div className="flex flex-col sm:flex-row justify-between gap-3">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-medium">
-                        {appt.client.firstName} {appt.client.lastName}
-                      </h3>
-                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_COLORS[appt.status]}`}>
-                        {STATUS_LABELS[appt.status]}
-                      </span>
+          {appointments.map((appt) => {
+            const serviceNames = appt.services.map((s) => s.serviceName).join(', ');
+            return (
+              <Card key={appt.id}>
+                <CardContent className="p-4">
+                  <div className="flex flex-col sm:flex-row justify-between gap-3">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="font-medium">
+                          {appt.client.firstName} {appt.client.lastName}
+                        </h3>
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_COLORS[appt.status]}`}>
+                          {STATUS_LABELS[appt.status]}
+                        </span>
+                      </div>
+                      <p className="text-sm text-[var(--muted-foreground)]">
+                        {serviceNames} com {appt.staff.firstName} {appt.staff.lastName}
+                      </p>
+                      <p className="text-sm text-[var(--muted-foreground)]">
+                        {formatDate(appt.startTime)} - {formatTime(appt.startTime)} ate {formatTime(appt.endTime)}
+                      </p>
+                      <p className="text-sm font-medium">
+                        R$ {parseFloat(appt.totalPrice).toFixed(2)} &middot; {appt.totalDuration} min
+                      </p>
                     </div>
-                    <p className="text-sm text-[var(--muted-foreground)]">
-                      {appt.service.name} com {appt.staff.firstName} {appt.staff.lastName}
-                    </p>
-                    <p className="text-sm text-[var(--muted-foreground)]">
-                      {formatDate(appt.startTime)} - {formatTime(appt.startTime)} ate {formatTime(appt.endTime)}
-                    </p>
-                    <p className="text-sm font-medium">
-                      R$ {parseFloat(appt.service.price).toFixed(2)}
-                    </p>
+                    {appt.status === 'PENDING' && (
+                      <div className="flex gap-2 self-start">
+                        <Button
+                          size="sm"
+                          onClick={() => confirmMutation.mutate(appt.id)}
+                          disabled={confirmMutation.isPending}
+                        >
+                          <Check className="h-4 w-4 mr-1" /> Confirmar
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => cancelMutation.mutate(appt.id)}
+                          disabled={cancelMutation.isPending}
+                        >
+                          <X className="h-4 w-4 mr-1" /> Cancelar
+                        </Button>
+                      </div>
+                    )}
                   </div>
-                  {appt.status === 'PENDING' && (
-                    <div className="flex gap-2 self-start">
-                      <Button
-                        size="sm"
-                        onClick={() => confirmMutation.mutate(appt.id)}
-                        disabled={confirmMutation.isPending}
-                      >
-                        <Check className="h-4 w-4 mr-1" />
-                        Confirmar
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => cancelMutation.mutate(appt.id)}
-                        disabled={cancelMutation.isPending}
-                      >
-                        <X className="h-4 w-4 mr-1" />
-                        Cancelar
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       ) : (
         <div className="rounded-lg border border-[var(--border)] p-8 text-center">

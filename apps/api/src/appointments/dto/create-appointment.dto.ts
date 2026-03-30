@@ -1,8 +1,10 @@
-import { IsDateString, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsArray, IsDateString, IsOptional, IsString, IsUUID, ArrayMinSize } from 'class-validator';
 
 export class CreateAppointmentDto {
-  @IsUUID()
-  serviceId: string;
+  @IsArray()
+  @IsUUID('4', { each: true })
+  @ArrayMinSize(1)
+  serviceIds: string[];
 
   @IsUUID()
   staffId: string;

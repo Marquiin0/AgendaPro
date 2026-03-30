@@ -43,6 +43,13 @@ AgendaPro/
 - API prefix: todas as rotas NestJS sob `/api`
 - IDs: UUID v4 em todos os models
 
+### Autonomia do Agente
+- **Operações de banco de desenvolvimento** (reset, migrate, seed): pode executar sem pedir aval
+- **Instalar dependências**: pode executar sem pedir aval
+- **Criar/editar arquivos de código**: pode executar sem pedir aval
+- **Commits e push para GitHub**: pode executar sem pedir aval
+- **Só pedir aval do usuário para**: mudanças arquiteturais muito grandes, deletar funcionalidades existentes, ou operações destrutivas em produção
+
 ### Git & CI/CD
 - Repositório: https://github.com/Marquiin0/AgendaPro.git
 - Branch principal: `main`
@@ -79,11 +86,13 @@ pnpm type-check             # Verificar tipos
 - Service (pertence a um Business)
 - Staff (pertence a um Business)
 - Schedule (horário semanal recorrente por Staff)
-- Appointment (liga Client + Service + Staff + horário)
+- Appointment (liga Client + Staff + horário)
+- AppointmentService (liga Appointment + Service, com snapshot de preço/duração)
 
 ### Fluxo de Agendamento
 1. Cliente busca negócios por categoria/cidade
 2. Seleciona um negócio e vê os serviços
-3. Escolhe serviço → funcionário → data → horário disponível
-4. Confirma agendamento
-5. Pode reagendar ou cancelar pelo dashboard
+3. Escolhe **múltiplos serviços** (toggle/switch) → funcionário → data → horário disponível
+4. Duração e preço total são calculados automaticamente pela soma dos serviços selecionados
+5. Confirma agendamento
+6. Pode reagendar ou cancelar pelo dashboard

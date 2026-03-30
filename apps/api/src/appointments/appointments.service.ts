@@ -12,16 +12,21 @@ export class AppointmentsService {
   constructor(private prisma: PrismaService) {}
 
   async create(clientId: string, dto: CreateAppointmentDto) {
-    const service = await this.prisma.service.findUnique({
-      where: { id: dto.serviceId },
+    // Fetch all selected services
+    const services = await this.prisma.service.findMany({
+      where: { id: { in: dto.serviceIds }, isActive: true },
     });
 
-    if (!service) {
-      throw new NotFoundException('Servico nao encontrado');
+    if (services.length !== dto.serviceIds.length) {
+      throw new NotFoundException('Um ou mais servicos nao foram encontrados');
     }
 
+    // Calculate total duration and price
+    const totalDuration = services.reduce((sum, s) => sum + s.durationMin, 0);
+    const totalPrice = services.reduce((sum, s) => sum + Number(s.price), 0);
+
     const startTime = new Date(dto.startTime);
-    const endTime = new Date(startTime.getTime() + service.durationMin * 60000);
+    const endTime = new Date(startTime.getTime() + totalDuration * 60000);
 
     // Check for conflicting appointments within a transaction
     const result = await this.prisma.$transaction(async (tx) => {
@@ -41,14 +46,23 @@ export class AppointmentsService {
       return tx.appointment.create({
         data: {
           clientId,
-          serviceId: dto.serviceId,
           staffId: dto.staffId,
           startTime,
           endTime,
+          totalDuration,
+          totalPrice,
           notes: dto.notes,
+          services: {
+            create: services.map((s) => ({
+              serviceId: s.id,
+              serviceName: s.name,
+              price: s.price,
+              durationMin: s.durationMin,
+            })),
+          },
         },
         include: {
-          service: true,
+          services: { include: { service: true } },
           staff: true,
           client: {
             select: { id: true, firstName: true, lastName: true, email: true },
@@ -64,7 +78,11 @@ export class AppointmentsService {
     return this.prisma.appointment.findMany({
       where: { clientId },
       include: {
-        service: { include: { business: { include: { category: true } } } },
+        services: {
+          include: {
+            service: { include: { business: { include: { category: true } } } },
+          },
+        },
         staff: true,
       },
       orderBy: { startTime: 'desc' },
@@ -82,10 +100,12 @@ export class AppointmentsService {
 
     return this.prisma.appointment.findMany({
       where: {
-        service: { businessId: business.id },
+        services: {
+          some: { service: { businessId: business.id } },
+        },
       },
       include: {
-        service: true,
+        services: { include: { service: true } },
         staff: true,
         client: {
           select: { id: true, firstName: true, lastName: true, email: true, phone: true },
@@ -99,7 +119,9 @@ export class AppointmentsService {
     const appointment = await this.prisma.appointment.findUnique({
       where: { id },
       include: {
-        service: { include: { business: true } },
+        services: {
+          include: { service: { include: { business: true } } },
+        },
         staff: true,
         client: {
           select: { id: true, firstName: true, lastName: true, email: true },
@@ -117,9 +139,9 @@ export class AppointmentsService {
   async cancel(id: string, userId: string) {
     const appointment = await this.findOne(id);
 
-    // Allow cancel by client or business owner
     const isClient = appointment.clientId === userId;
-    const isOwner = appointment.service.business.ownerId === userId;
+    const business = appointment.services[0]?.service?.business;
+    const isOwner = business?.ownerId === userId;
 
     if (!isClient && !isOwner) {
       throw new ForbiddenException('Sem permissao para cancelar');
@@ -128,21 +150,22 @@ export class AppointmentsService {
     return this.prisma.appointment.update({
       where: { id },
       data: { status: 'CANCELLED' },
-      include: { service: true, staff: true },
+      include: { services: { include: { service: true } }, staff: true },
     });
   }
 
   async confirm(id: string, userId: string) {
     const appointment = await this.findOne(id);
+    const business = appointment.services[0]?.service?.business;
 
-    if (appointment.service.business.ownerId !== userId) {
+    if (!business || business.ownerId !== userId) {
       throw new ForbiddenException('Apenas o dono do negocio pode confirmar');
     }
 
     return this.prisma.appointment.update({
       where: { id },
       data: { status: 'CONFIRMED' },
-      include: { service: true, staff: true },
+      include: { services: { include: { service: true } }, staff: true },
     });
   }
 
@@ -150,16 +173,16 @@ export class AppointmentsService {
     const appointment = await this.findOne(id);
 
     const isClient = appointment.clientId === userId;
-    const isOwner = appointment.service.business.ownerId === userId;
+    const business = appointment.services[0]?.service?.business;
+    const isOwner = business?.ownerId === userId;
 
     if (!isClient && !isOwner) {
       throw new ForbiddenException('Sem permissao para reagendar');
     }
 
     const startTime = new Date(newStartTime);
-    const endTime = new Date(startTime.getTime() + appointment.service.durationMin * 60000);
+    const endTime = new Date(startTime.getTime() + appointment.totalDuration * 60000);
 
-    // Check conflicts
     const conflict = await this.prisma.appointment.findFirst({
       where: {
         staffId: appointment.staffId,
@@ -177,7 +200,7 @@ export class AppointmentsService {
     return this.prisma.appointment.update({
       where: { id },
       data: { startTime, endTime, status: 'PENDING' },
-      include: { service: true, staff: true },
+      include: { services: { include: { service: true } }, staff: true },
     });
   }
 }

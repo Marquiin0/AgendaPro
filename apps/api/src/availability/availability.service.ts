@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { DayOfWeek } from '@agendapro/database';
 
@@ -6,7 +6,7 @@ import { DayOfWeek } from '@agendapro/database';
 export class AvailabilityService {
   constructor(private prisma: PrismaService) {}
 
-  async getAvailableSlots(staffId: string, serviceId: string, dateStr: string) {
+  async getAvailableSlots(staffId: string, totalDurationMin: number, dateStr: string) {
     const date = new Date(dateStr + 'T00:00:00');
     const dayIndex = date.getDay();
     const dayMap: Record<number, DayOfWeek> = {
@@ -20,7 +20,6 @@ export class AvailabilityService {
     };
     const dayOfWeek = dayMap[dayIndex];
 
-    // Get staff schedule for this day
     const schedule = await this.prisma.schedule.findUnique({
       where: {
         staffId_dayOfWeek: { staffId, dayOfWeek },
@@ -31,20 +30,11 @@ export class AvailabilityService {
       return [];
     }
 
-    // Get service duration
-    const service = await this.prisma.service.findUnique({
-      where: { id: serviceId },
-    });
-
-    if (!service) {
-      throw new NotFoundException('Servico nao encontrado');
-    }
-
-    // Generate all possible slots
+    // Generate all possible slots based on total duration
     const slots = this.generateSlots(
       schedule.startTime,
       schedule.endTime,
-      service.durationMin,
+      totalDurationMin,
     );
 
     // Get existing appointments for this staff on this date
@@ -88,6 +78,9 @@ export class AvailabilityService {
     let currentMin = startH * 60 + startM;
     const endMin = endH * 60 + endM;
 
+    // Use 15-min intervals for slot start times
+    const interval = 15;
+
     while (currentMin + durationMin <= endMin) {
       const slotStartH = Math.floor(currentMin / 60);
       const slotStartM = currentMin % 60;
@@ -100,7 +93,7 @@ export class AvailabilityService {
         endTime: `${String(slotEndH).padStart(2, '0')}:${String(slotEndM).padStart(2, '0')}`,
       });
 
-      currentMin += durationMin;
+      currentMin += interval;
     }
 
     return slots;
