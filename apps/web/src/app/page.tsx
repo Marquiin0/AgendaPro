@@ -10,7 +10,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useScrollAnimation } from '@/hooks/use-scroll-animation';
-import { useParallax } from '@/hooks/use-parallax';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 
@@ -36,94 +35,6 @@ function AnimatedSection({
       style={{ transitionDelay: `${delay}ms` }}
     >
       {children}
-    </div>
-  );
-}
-
-// ─── Parallax Floating Icons (decorative) ───
-function FloatingIcons({ scrollY }: { scrollY: number }) {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10" aria-hidden>
-      {/* Calendar icon top-left */}
-      <div
-        className="absolute top-[10%] left-[5%] opacity-[0.07]"
-        style={{ transform: `translateY(${scrollY * 0.08}px) rotate(${scrollY * 0.02}deg)` }}
-      >
-        <Calendar className="h-24 w-24 sm:h-32 sm:w-32" />
-      </div>
-      {/* Clock icon right */}
-      <div
-        className="absolute top-[30%] right-[8%] opacity-[0.05]"
-        style={{ transform: `translateY(${scrollY * -0.06}px) rotate(${scrollY * -0.015}deg)` }}
-      >
-        <Clock className="h-20 w-20 sm:h-28 sm:w-28" />
-      </div>
-      {/* Scissors bottom-left */}
-      <div
-        className="absolute top-[55%] left-[3%] opacity-[0.06]"
-        style={{ transform: `translateY(${scrollY * 0.04}px) rotate(${scrollY * 0.01}deg)` }}
-      >
-        <Scissors className="h-16 w-16 sm:h-24 sm:w-24" />
-      </div>
-      {/* Users icon mid-right */}
-      <div
-        className="absolute top-[70%] right-[5%] opacity-[0.05]"
-        style={{ transform: `translateY(${scrollY * -0.05}px)` }}
-      >
-        <Users className="h-20 w-20 sm:h-28 sm:w-28" />
-      </div>
-      {/* Store bottom */}
-      <div
-        className="absolute top-[85%] left-[15%] opacity-[0.04]"
-        style={{ transform: `translateY(${scrollY * 0.03}px) rotate(${scrollY * -0.01}deg)` }}
-      >
-        <Store className="h-20 w-20 sm:h-24 sm:w-24" />
-      </div>
-    </div>
-  );
-}
-
-// ─── Section Divider with parallax wave ───
-function ParallaxDivider({ scrollY, variant = 'wave' }: { scrollY: number; variant?: 'wave' | 'dots' | 'gradient' }) {
-  if (variant === 'dots') {
-    return (
-      <div className="relative h-24 flex items-center justify-center overflow-hidden">
-        <div className="flex gap-3" style={{ transform: `translateX(${scrollY * -0.03}px)` }}>
-          {Array.from({ length: 20 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-2 w-2 rounded-full bg-[var(--primary)]"
-              style={{ opacity: 0.1 + (i % 5) * 0.05 }}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  }
-  if (variant === 'gradient') {
-    return (
-      <div className="relative h-32 overflow-hidden">
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--primary)]/10 to-transparent"
-          style={{ transform: `scaleX(${1 + scrollY * 0.0002})` }}
-        />
-      </div>
-    );
-  }
-  // wave
-  return (
-    <div className="relative h-20 overflow-hidden">
-      <svg
-        viewBox="0 0 1440 80"
-        className="absolute bottom-0 w-full h-full text-[var(--muted)]/30"
-        preserveAspectRatio="none"
-        style={{ transform: `translateX(${scrollY * -0.02}px)` }}
-      >
-        <path
-          fill="currentColor"
-          d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80 Z"
-        />
-      </svg>
     </div>
   );
 }
@@ -189,120 +100,55 @@ const steps = [
 ];
 
 const features = [
-  {
-    icon: CalendarDays,
-    title: 'Agendamento 24/7',
-    desc: 'Seus clientes agendam a qualquer hora, de qualquer lugar.',
-  },
-  {
-    icon: ToggleRight,
-    title: 'Multiplos Servicos',
-    desc: 'Combine corte + barba em um unico agendamento com preco e duracao automaticos.',
-  },
-  {
-    icon: Users,
-    title: 'Gestao de Equipe',
-    desc: 'Controle horarios individuais de cada profissional da sua equipe.',
-  },
-  {
-    icon: LayoutDashboard,
-    title: 'Painel Administrativo',
-    desc: 'Servicos, equipe, agendamentos e calendario em um so lugar.',
-  },
-  {
-    icon: CalendarDays,
-    title: 'Calendario Inteligente',
-    desc: 'Visualize sua agenda do dia, semana e mes com cores por status.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Confirmacao Rapida',
-    desc: 'Confirme ou cancele agendamentos com um unico clique.',
-  },
+  { icon: CalendarDays, title: 'Agendamento 24/7', desc: 'Seus clientes agendam a qualquer hora, de qualquer lugar.' },
+  { icon: ToggleRight, title: 'Multiplos Servicos', desc: 'Combine corte + barba em um unico agendamento com preco e duracao automaticos.' },
+  { icon: Users, title: 'Gestao de Equipe', desc: 'Controle horarios individuais de cada profissional da sua equipe.' },
+  { icon: LayoutDashboard, title: 'Painel Administrativo', desc: 'Servicos, equipe, agendamentos e calendario em um so lugar.' },
+  { icon: CalendarDays, title: 'Calendario Inteligente', desc: 'Visualize sua agenda do dia, semana e mes com cores por status.' },
+  { icon: ShieldCheck, title: 'Confirmacao Rapida', desc: 'Confirme ou cancele agendamentos com um unico clique.' },
 ];
 
 const industries = [
-  {
-    icon: Scissors,
-    title: 'Barbearias',
-    desc: 'Cortes, barbas e luzes agendados sem dor de cabeca. Seus clientes escolhem o barbeiro e o servico.',
-    color: 'from-blue-500 to-blue-600',
-  },
-  {
-    icon: Stethoscope,
-    title: 'Clinicas',
-    desc: 'Consultas organizadas com horarios definidos por especialidade e profissional.',
-    color: 'from-green-500 to-green-600',
-  },
-  {
-    icon: Camera,
-    title: 'Estudios',
-    desc: 'Sessoes de foto, video ou gravacao sem conflitos de agenda entre projetos.',
-    color: 'from-purple-500 to-purple-600',
-  },
-  {
-    icon: Briefcase,
-    title: 'Consultorias',
-    desc: 'Reunioes e mentorias agendadas no horario perfeito para ambos os lados.',
-    color: 'from-orange-500 to-orange-600',
-  },
+  { icon: Scissors, title: 'Barbearias', desc: 'Cortes, barbas e luzes agendados sem dor de cabeca. Seus clientes escolhem o barbeiro e o servico.', color: 'from-blue-500 to-blue-600' },
+  { icon: Stethoscope, title: 'Clinicas', desc: 'Consultas organizadas com horarios definidos por especialidade e profissional.', color: 'from-green-500 to-green-600' },
+  { icon: Camera, title: 'Estudios', desc: 'Sessoes de foto, video ou gravacao sem conflitos de agenda entre projetos.', color: 'from-purple-500 to-purple-600' },
+  { icon: Briefcase, title: 'Consultorias', desc: 'Reunioes e mentorias agendadas no horario perfeito para ambos os lados.', color: 'from-orange-500 to-orange-600' },
 ];
 
 const testimonials = [
-  {
-    name: 'Rafael Mendes',
-    role: 'Dono',
-    business: 'Barbearia Style',
-    text: 'Desde que comecei a usar o AgendaPro, meus clientes agendam sozinhos e eu nao perco mais tempo no WhatsApp. Meus no-shows caíram pela metade!',
-    rating: 5,
-  },
-  {
-    name: 'Dra. Camila Santos',
-    role: 'Diretora',
-    business: 'Clinica Vida',
-    text: 'A organizacao da agenda melhorou demais. Cada medico tem seu horario configurado e os pacientes conseguem agendar online sem ligar pra clinica.',
-    rating: 5,
-  },
-  {
-    name: 'Lucas Oliveira',
-    role: 'Fotografo',
-    business: 'Studio LO',
-    text: 'Perfeito pra quem trabalha com sessoes de foto. Consigo configurar duracoes diferentes pra cada tipo de ensaio e tudo fica organizado.',
-    rating: 5,
-  },
+  { name: 'Rafael Mendes', role: 'Dono', business: 'Barbearia Style', text: 'Desde que comecei a usar o AgendaPro, meus clientes agendam sozinhos e eu nao perco mais tempo no WhatsApp. Meus no-shows cairam pela metade!', rating: 5 },
+  { name: 'Dra. Camila Santos', role: 'Diretora', business: 'Clinica Vida', text: 'A organizacao da agenda melhorou demais. Cada medico tem seu horario configurado e os pacientes conseguem agendar online sem ligar pra clinica.', rating: 5 },
+  { name: 'Lucas Oliveira', role: 'Fotografo', business: 'Studio LO', text: 'Perfeito pra quem trabalha com sessoes de foto. Consigo configurar duracoes diferentes pra cada tipo de ensaio e tudo fica organizado.', rating: 5 },
 ];
 
 export default function HomePage() {
-  const scrollY = useParallax();
-
   return (
-    <div className="relative flex flex-col overflow-hidden">
-      {/* Global floating icons with parallax */}
-      <FloatingIcons scrollY={scrollY} />
+    <div className="relative flex flex-col">
 
       {/* ══════════ 1. HERO ══════════ */}
       <section className="relative px-4 pt-16 pb-20 sm:pt-24 sm:pb-32 overflow-hidden">
-        {/* Background gradient with parallax */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-transparent to-[var(--primary)]/10 -z-10" />
-        <div
-          className="absolute top-20 right-0 w-[500px] h-[500px] rounded-full bg-[var(--primary)]/5 blur-3xl -z-10"
-          style={{ transform: `translateY(${scrollY * 0.15}px)` }}
-        />
-        <div
-          className="absolute -bottom-20 -left-20 w-[400px] h-[400px] rounded-full bg-blue-400/5 blur-3xl -z-10"
-          style={{ transform: `translateY(${scrollY * -0.1}px)` }}
-        />
+        {/* Animated background orbs - CSS only, GPU accelerated */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-[var(--primary)]/[0.07] blur-[100px] animate-[drift_20s_ease-in-out_infinite]" />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full bg-blue-400/[0.05] blur-[80px] animate-[drift_25s_ease-in-out_infinite_reverse]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full bg-purple-400/[0.04] blur-[60px] animate-[pulse_8s_ease-in-out_infinite]" />
+        </div>
+
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 -z-10 opacity-[0.03]" style={{
+          backgroundImage: 'radial-gradient(circle, var(--foreground) 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }} />
 
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-            {/* Copy */}
             <div className="flex-1 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 rounded-full bg-[var(--primary)]/10 px-4 py-1.5 text-sm font-medium text-[var(--primary)] mb-6">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[var(--primary)]/10 px-4 py-1.5 text-sm font-medium text-[var(--primary)] mb-6 animate-[fadeSlideUp_0.6s_ease-out]">
                 <Sparkles className="h-4 w-4" />
                 Plataforma de Agendamento #1
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1]">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] animate-[fadeSlideUp_0.8s_ease-out]">
                 Seu negocio{' '}
                 <span className="bg-gradient-to-r from-[var(--primary)] to-blue-400 bg-clip-text text-transparent">
                   sempre lotado.
@@ -311,38 +157,35 @@ export default function HomePage() {
                 Sem esforco.
               </h1>
 
-              <p className="mt-6 text-lg sm:text-xl text-[var(--muted-foreground)] max-w-xl mx-auto lg:mx-0">
+              <p className="mt-6 text-lg sm:text-xl text-[var(--muted-foreground)] max-w-xl mx-auto lg:mx-0 animate-[fadeSlideUp_1s_ease-out]">
                 A plataforma completa de agendamento online para barbearias, clinicas,
                 estudios e muito mais. Seus clientes agendam 24/7 enquanto voce foca no que importa.
               </p>
 
-              <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
+              <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center animate-[fadeSlideUp_1.2s_ease-out]">
                 <Link href="/register?role=ADMIN">
-                  <Button size="lg" className="w-full sm:w-auto text-base h-14 px-8 rounded-full shadow-lg shadow-[var(--primary)]/25 hover:shadow-xl hover:shadow-[var(--primary)]/30 transition-all">
+                  <Button size="lg" className="w-full sm:w-auto text-base h-14 px-8 rounded-full shadow-lg shadow-[var(--primary)]/25 hover:shadow-xl hover:shadow-[var(--primary)]/30 hover:scale-105 transition-all">
                     Comece Gratis
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 <a href="#como-funciona">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-base h-14 px-8 rounded-full">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-base h-14 px-8 rounded-full hover:scale-105 transition-all">
                     Veja como funciona
                   </Button>
                 </a>
               </div>
 
-              {/* Stats */}
-              <div className="mt-10 flex items-center justify-center lg:justify-start gap-8">
+              <div className="mt-10 flex items-center justify-center lg:justify-start gap-8 animate-[fadeSlideUp_1.4s_ease-out]">
                 {[
                   { value: 500, suffix: '+', label: 'Negocios' },
                   { value: 10000, suffix: '+', label: 'Agendamentos' },
                   { value: 4.9, suffix: '', label: 'Avaliacao' },
                 ].map((stat) => (
                   <div key={stat.label} className="text-center">
-                    <div className="text-2xl sm:text-3xl font-bold text-[var(--foreground)]">
+                    <div className="text-2xl sm:text-3xl font-bold">
                       {stat.label === 'Avaliacao' ? (
-                        <span className="flex items-center gap-1">
-                          4.9 <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                        </span>
+                        <span className="flex items-center gap-1">4.9 <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" /></span>
                       ) : (
                         <Counter target={stat.value} suffix={stat.suffix} />
                       )}
@@ -353,12 +196,10 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Hero Visual - Booking Preview */}
-            <div className="flex-1 w-full max-w-lg lg:max-w-xl">
+            {/* Hero Visual */}
+            <div className="flex-1 w-full max-w-lg lg:max-w-xl animate-[fadeSlideUp_1s_ease-out]">
               <div className="relative">
-                {/* Floating animation */}
-                <div className="animate-[float_6s_ease-in-out_infinite] rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-2xl p-6">
-                  {/* Fake booking UI */}
+                <div className="animate-[float_6s_ease-in-out_infinite] rounded-2xl border border-[var(--border)]/60 bg-[var(--card)]/80 backdrop-blur-xl shadow-2xl p-6">
                   <div className="flex items-center gap-2 mb-4">
                     <div className="h-3 w-3 rounded-full bg-red-400" />
                     <div className="h-3 w-3 rounded-full bg-yellow-400" />
@@ -366,59 +207,47 @@ export default function HomePage() {
                     <span className="ml-2 text-xs text-[var(--muted-foreground)]">agendapro.com/booking</span>
                   </div>
                   <h3 className="font-bold text-lg mb-3">Escolha os servicos</h3>
-                  {/* Fake service toggles */}
                   {[
                     { name: 'Corte Degrade', time: '30 min', price: 'R$ 45', active: true },
                     { name: 'Barba Completa', time: '20 min', price: 'R$ 30', active: true },
                     { name: 'Luzes', time: '60 min', price: 'R$ 120', active: false },
                   ].map((s) => (
-                    <div
-                      key={s.name}
-                      className={cn(
-                        'flex items-center justify-between rounded-full border-2 p-3 mb-2 transition-all',
-                        s.active ? 'border-[var(--primary)] bg-[var(--primary)]/5' : 'border-[var(--border)]',
-                      )}
-                    >
+                    <div key={s.name} className={cn('flex items-center justify-between rounded-full border-2 p-3 mb-2', s.active ? 'border-[var(--primary)] bg-[var(--primary)]/5' : 'border-[var(--border)]')}>
                       <div>
                         <span className="font-medium text-sm">{s.name}</span>
                         <span className="text-xs text-[var(--muted-foreground)] ml-2">{s.time}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-bold text-[var(--primary)]">{s.price}</span>
-                        <div className={cn('w-10 h-6 rounded-full transition-colors', s.active ? 'bg-[var(--primary)]' : 'bg-gray-300')}>
-                          <div className={cn('h-5 w-5 rounded-full bg-white shadow mt-0.5 transition-transform', s.active ? 'translate-x-4' : 'translate-x-0.5')} />
+                        <div className={cn('w-10 h-6 rounded-full', s.active ? 'bg-[var(--primary)]' : 'bg-gray-300')}>
+                          <div className={cn('h-5 w-5 rounded-full bg-white shadow mt-0.5', s.active ? 'translate-x-4' : 'translate-x-0.5')} />
                         </div>
                       </div>
                     </div>
                   ))}
-                  {/* Fake cart */}
                   <div className="mt-3 rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] p-3 text-center">
                     <span className="font-medium text-sm">2 servicos &middot; 50 min &middot; R$ 75,00</span>
                     <div className="text-xs opacity-80 mt-0.5">Continuar &rarr;</div>
                   </div>
                 </div>
-
-                {/* Decorative elements */}
-                <div className="absolute -top-4 -right-4 h-24 w-24 rounded-2xl bg-[var(--primary)]/10 -z-10 rotate-12" />
-                <div className="absolute -bottom-4 -left-4 h-20 w-20 rounded-full bg-blue-400/10 -z-10" />
+                {/* Glow behind card */}
+                <div className="absolute inset-0 rounded-2xl bg-[var(--primary)]/10 blur-2xl -z-10 animate-[pulse_4s_ease-in-out_infinite]" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <ParallaxDivider scrollY={scrollY} variant="gradient" />
-
       {/* ══════════ 2. TRUST BAR ══════════ */}
-      <section className="border-y border-[var(--border)] bg-[var(--muted)]/50 py-8">
+      <section className="border-y border-[var(--border)]/40 bg-[var(--muted)]/30 py-8">
         <div className="mx-auto max-w-7xl px-4">
-          <p className="text-center text-sm font-medium text-[var(--muted-foreground)] mb-6">
-            IDEAL PARA TODOS OS TIPOS DE NEGOCIO
+          <p className="text-center text-sm font-medium text-[var(--muted-foreground)] mb-6 uppercase tracking-widest">
+            Ideal para todos os tipos de negocio
           </p>
           <div className="flex flex-wrap justify-center gap-6 sm:gap-10">
             {categories.map((cat) => (
-              <div key={cat.label} className="flex flex-col items-center gap-2 group">
-                <div className="h-12 w-12 rounded-full bg-[var(--background)] border border-[var(--border)] flex items-center justify-center group-hover:border-[var(--primary)] group-hover:bg-[var(--primary)]/5 transition-all">
+              <div key={cat.label} className="flex flex-col items-center gap-2 group cursor-default">
+                <div className="h-12 w-12 rounded-full bg-[var(--background)]/80 backdrop-blur border border-[var(--border)]/60 flex items-center justify-center group-hover:border-[var(--primary)] group-hover:bg-[var(--primary)]/10 group-hover:scale-110 transition-all duration-300">
                   <cat.icon className="h-5 w-5 text-[var(--muted-foreground)] group-hover:text-[var(--primary)] transition-colors" />
                 </div>
                 <span className="text-xs font-medium text-[var(--muted-foreground)]">{cat.label}</span>
@@ -428,18 +257,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ParallaxDivider scrollY={scrollY} variant="dots" />
-
       {/* ══════════ 3. COMO FUNCIONA ══════════ */}
-      <section id="como-funciona" className="px-4 py-20 sm:py-28">
+      <section id="como-funciona" className="relative px-4 py-20 sm:py-28 overflow-hidden">
+        {/* Subtle radial glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full bg-[var(--primary)]/[0.03] blur-[100px] -z-10" />
+
         <div className="mx-auto max-w-7xl">
           <AnimatedSection className="text-center mb-16">
-            <p className="text-sm font-semibold text-[var(--primary)] uppercase tracking-wider mb-2">
-              Simples e rapido
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-bold">
-              Como funciona
-            </h2>
+            <p className="text-sm font-semibold text-[var(--primary)] uppercase tracking-wider mb-2">Simples e rapido</p>
+            <h2 className="text-3xl sm:text-4xl font-bold">Como funciona</h2>
             <p className="mt-4 text-[var(--muted-foreground)] max-w-2xl mx-auto">
               Em 3 passos simples, seu negocio estara recebendo agendamentos online.
             </p>
@@ -449,19 +275,12 @@ export default function HomePage() {
             {steps.map((step, i) => (
               <AnimatedSection key={step.num} delay={i * 150}>
                 <div className="relative text-center group">
-                  {/* Number */}
-                  <div className="text-6xl font-black text-[var(--primary)]/10 mb-4">
-                    {step.num}
-                  </div>
-                  {/* Icon */}
-                  <div className="mx-auto h-16 w-16 rounded-2xl bg-[var(--primary)]/10 flex items-center justify-center mb-4 group-hover:bg-[var(--primary)] group-hover:text-[var(--primary-foreground)] transition-all duration-300">
+                  <div className="text-7xl font-black text-[var(--primary)]/[0.07] mb-4 select-none">{step.num}</div>
+                  <div className="mx-auto h-16 w-16 rounded-2xl bg-[var(--primary)]/10 flex items-center justify-center mb-4 group-hover:bg-[var(--primary)] transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-[var(--primary)]/25">
                     <step.icon className="h-7 w-7 text-[var(--primary)] group-hover:text-[var(--primary-foreground)] transition-colors" />
                   </div>
                   <h3 className="text-xl font-bold mb-2">{step.title}</h3>
-                  <p className="text-[var(--muted-foreground)] text-sm max-w-xs mx-auto">
-                    {step.desc}
-                  </p>
-                  {/* Connector line (hidden on mobile, shown on desktop) */}
+                  <p className="text-[var(--muted-foreground)] text-sm max-w-xs mx-auto">{step.desc}</p>
                   {i < 2 && (
                     <div className="hidden md:block absolute top-12 -right-4 w-8">
                       <ChevronRight className="h-6 w-6 text-[var(--primary)]/30" />
@@ -474,27 +293,26 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ParallaxDivider scrollY={scrollY} variant="wave" />
-
       {/* ══════════ 4. FEATURES ══════════ */}
-      <section className="px-4 py-20 bg-[var(--muted)]/50">
+      <section className="relative px-4 py-20 bg-[var(--muted)]/30 overflow-hidden">
+        {/* Mesh gradient background */}
+        <div className="absolute inset-0 -z-10 opacity-[0.02]" style={{
+          backgroundImage: 'radial-gradient(ellipse at 20% 50%, var(--primary) 0%, transparent 50%), radial-gradient(ellipse at 80% 50%, blue 0%, transparent 50%)',
+        }} />
+
         <div className="mx-auto max-w-7xl">
           <AnimatedSection className="text-center mb-16">
-            <p className="text-sm font-semibold text-[var(--primary)] uppercase tracking-wider mb-2">
-              Funcionalidades
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-bold">
-              Tudo que seu negocio precisa
-            </h2>
+            <p className="text-sm font-semibold text-[var(--primary)] uppercase tracking-wider mb-2">Funcionalidades</p>
+            <h2 className="text-3xl sm:text-4xl font-bold">Tudo que seu negocio precisa</h2>
           </AnimatedSection>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((feature, i) => (
               <AnimatedSection key={feature.title} delay={i * 100}>
-                <Card className="h-full border-0 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                <Card className="h-full border-0 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 cursor-default group">
                   <CardContent className="p-6">
-                    <div className="h-12 w-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center mb-4">
-                      <feature.icon className="h-6 w-6 text-[var(--primary)]" />
+                    <div className="h-12 w-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center mb-4 group-hover:bg-[var(--primary)] group-hover:scale-110 transition-all duration-300">
+                      <feature.icon className="h-6 w-6 text-[var(--primary)] group-hover:text-[var(--primary-foreground)] transition-colors" />
                     </div>
                     <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
                     <p className="text-sm text-[var(--muted-foreground)]">{feature.desc}</p>
@@ -506,18 +324,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ParallaxDivider scrollY={scrollY} variant="dots" />
-
       {/* ══════════ 5. PREVIEW / DEMO ══════════ */}
-      <section className="px-4 py-20 sm:py-28">
+      <section className="relative px-4 py-20 sm:py-28 overflow-hidden">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-[var(--primary)]/[0.04] blur-[100px] -z-10 animate-[drift_30s_ease-in-out_infinite]" />
+
         <div className="mx-auto max-w-7xl">
           <AnimatedSection className="text-center mb-12">
-            <p className="text-sm font-semibold text-[var(--primary)] uppercase tracking-wider mb-2">
-              Veja na pratica
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-bold">
-              Uma experiencia incrivel para todos
-            </h2>
+            <p className="text-sm font-semibold text-[var(--primary)] uppercase tracking-wider mb-2">Veja na pratica</p>
+            <h2 className="text-3xl sm:text-4xl font-bold">Uma experiencia incrivel para todos</h2>
             <p className="mt-4 text-[var(--muted-foreground)] max-w-2xl mx-auto">
               Interface intuitiva tanto para donos de negocio quanto para clientes.
             </p>
@@ -526,7 +340,7 @@ export default function HomePage() {
           <AnimatedSection>
             <div className="grid gap-8 md:grid-cols-2">
               {/* Client View */}
-              <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-lg overflow-hidden">
+              <div className="rounded-2xl border border-[var(--border)]/60 bg-[var(--card)]/80 backdrop-blur-md shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 <div className="bg-[var(--primary)] text-[var(--primary-foreground)] px-6 py-3 flex items-center gap-2">
                   <Users className="h-4 w-4" />
                   <span className="font-medium text-sm">Visao do Cliente</span>
@@ -551,15 +365,7 @@ export default function HomePage() {
                   </div>
                   <div className="grid grid-cols-4 gap-1.5">
                     {['09:00', '09:30', '10:00', '10:30'].map((t, i) => (
-                      <div
-                        key={t}
-                        className={cn(
-                          'rounded-2xl border text-center py-2 text-xs font-medium',
-                          i === 2
-                            ? 'border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)]'
-                            : 'border-[var(--border)]',
-                        )}
-                      >
+                      <div key={t} className={cn('rounded-2xl border text-center py-2 text-xs font-medium', i === 2 ? 'border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)]' : 'border-[var(--border)]')}>
                         {t}
                       </div>
                     ))}
@@ -568,18 +374,15 @@ export default function HomePage() {
               </div>
 
               {/* Admin View */}
-              <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-lg overflow-hidden">
+              <div className="rounded-2xl border border-[var(--border)]/60 bg-[var(--card)]/80 backdrop-blur-md shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 <div className="bg-[var(--foreground)] text-[var(--background)] px-6 py-3 flex items-center gap-2">
                   <LayoutDashboard className="h-4 w-4" />
                   <span className="font-medium text-sm">Visao do Admin</span>
                 </div>
                 <div className="p-6 space-y-4">
                   <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { label: 'Agendamentos Hoje', value: '12' },
-                      { label: 'Receita do Dia', value: 'R$ 540' },
-                    ].map((s) => (
-                      <div key={s.label} className="rounded-full border border-[var(--border)] p-3">
+                    {[{ label: 'Agendamentos Hoje', value: '12' }, { label: 'Receita do Dia', value: 'R$ 540' }].map((s) => (
+                      <div key={s.label} className="rounded-2xl border border-[var(--border)]/60 p-3">
                         <p className="text-xs text-[var(--muted-foreground)]">{s.label}</p>
                         <p className="text-xl font-bold">{s.value}</p>
                       </div>
@@ -591,16 +394,14 @@ export default function HomePage() {
                       { client: 'Maria Santos', service: 'Luzes', time: '11:00', status: 'Pendente', color: 'bg-yellow-100 text-yellow-700' },
                       { client: 'Pedro Costa', service: 'Corte Social', time: '14:00', status: 'Confirmado', color: 'bg-green-100 text-green-700' },
                     ].map((a) => (
-                      <div key={a.client} className="flex items-center justify-between rounded-2xl border border-[var(--border)] px-3 py-2">
+                      <div key={a.client} className="flex items-center justify-between rounded-2xl border border-[var(--border)]/60 px-3 py-2">
                         <div>
                           <span className="text-sm font-medium">{a.client}</span>
                           <span className="text-xs text-[var(--muted-foreground)] ml-2">{a.service}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-[var(--muted-foreground)]">{a.time}</span>
-                          <span className={cn('text-[10px] font-medium px-2 py-0.5 rounded-full', a.color)}>
-                            {a.status}
-                          </span>
+                          <span className={cn('text-[10px] font-medium px-2 py-0.5 rounded-full', a.color)}>{a.status}</span>
                         </div>
                       </div>
                     ))}
@@ -612,32 +413,28 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ParallaxDivider scrollY={scrollY} variant="gradient" />
-
       {/* ══════════ 6. PARA QUEM E ══════════ */}
-      <section className="px-4 py-20 bg-[var(--muted)]/50">
+      <section className="relative px-4 py-20 bg-[var(--muted)]/30 overflow-hidden">
+        <div className="absolute bottom-0 left-0 w-[600px] h-[400px] rounded-full bg-blue-400/[0.03] blur-[100px] -z-10" />
+
         <div className="mx-auto max-w-7xl">
           <AnimatedSection className="text-center mb-16">
-            <p className="text-sm font-semibold text-[var(--primary)] uppercase tracking-wider mb-2">
-              Para todos os segmentos
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-bold">
-              Feito para o seu tipo de negocio
-            </h2>
+            <p className="text-sm font-semibold text-[var(--primary)] uppercase tracking-wider mb-2">Para todos os segmentos</p>
+            <h2 className="text-3xl sm:text-4xl font-bold">Feito para o seu tipo de negocio</h2>
           </AnimatedSection>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 items-stretch">
             {industries.map((ind, i) => (
               <AnimatedSection key={ind.title} delay={i * 100} className="h-full">
-                <Card className="h-full border-0 shadow-sm overflow-hidden group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col">
-                  <div className={cn('h-1.5 bg-gradient-to-r', ind.color)} />
+                <Card className="h-full border-0 shadow-sm overflow-hidden group hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col">
+                  <div className={cn('h-1.5 bg-gradient-to-r transition-all duration-300 group-hover:h-2', ind.color)} />
                   <CardContent className="p-6 flex flex-col flex-1">
-                    <div className={cn('h-12 w-12 rounded-full bg-gradient-to-r flex items-center justify-center mb-4 text-white', ind.color)}>
+                    <div className={cn('h-12 w-12 rounded-full bg-gradient-to-r flex items-center justify-center mb-4 text-white group-hover:scale-110 transition-transform duration-300', ind.color)}>
                       <ind.icon className="h-6 w-6" />
                     </div>
                     <h3 className="text-lg font-bold mb-2">{ind.title}</h3>
                     <p className="text-sm text-[var(--muted-foreground)] mb-4 flex-1">{ind.desc}</p>
-                    <Link href="/register?role=ADMIN" className="inline-flex items-center text-sm font-medium text-[var(--primary)] hover:gap-2 transition-all mt-auto">
+                    <Link href="/register?role=ADMIN" className="inline-flex items-center text-sm font-medium text-[var(--primary)] group-hover:translate-x-1 transition-transform mt-auto">
                       Comece agora <ChevronRight className="h-4 w-4 ml-1" />
                     </Link>
                   </CardContent>
@@ -648,45 +445,36 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ParallaxDivider scrollY={scrollY} variant="wave" />
-
       {/* ══════════ 7. DEPOIMENTOS ══════════ */}
-      <section className="px-4 py-20 sm:py-28">
+      <section className="relative px-4 py-20 sm:py-28 overflow-hidden">
+        <div className="absolute top-1/2 right-0 w-[400px] h-[400px] rounded-full bg-purple-400/[0.03] blur-[80px] -z-10 animate-[drift_22s_ease-in-out_infinite_reverse]" />
+
         <div className="mx-auto max-w-7xl">
           <AnimatedSection className="text-center mb-16">
-            <p className="text-sm font-semibold text-[var(--primary)] uppercase tracking-wider mb-2">
-              Depoimentos
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-bold">
-              O que nossos clientes dizem
-            </h2>
+            <p className="text-sm font-semibold text-[var(--primary)] uppercase tracking-wider mb-2">Depoimentos</p>
+            <h2 className="text-3xl sm:text-4xl font-bold">O que nossos clientes dizem</h2>
           </AnimatedSection>
 
           <div className="grid gap-6 md:grid-cols-3">
             {testimonials.map((t, i) => (
               <AnimatedSection key={t.name} delay={i * 150}>
-                <Card className="h-full border-0 shadow-sm">
+                <Card className="h-full border-0 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                   <CardContent className="p-6">
-                    {/* Stars */}
                     <div className="flex gap-1 mb-4">
                       {Array.from({ length: t.rating }).map((_, j) => (
                         <Star key={j} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                       ))}
                     </div>
-                    {/* Quote */}
-                    <p className="text-sm text-[var(--muted-foreground)] mb-6 leading-relaxed">
+                    <p className="text-sm text-[var(--muted-foreground)] mb-6 leading-relaxed italic">
                       &ldquo;{t.text}&rdquo;
                     </p>
-                    {/* Author */}
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 rounded-full bg-[var(--primary)] flex items-center justify-center text-[var(--primary-foreground)] font-bold text-sm">
                         {t.name.split(' ').map((n) => n[0]).join('')}
                       </div>
                       <div>
                         <p className="font-medium text-sm">{t.name}</p>
-                        <p className="text-xs text-[var(--muted-foreground)]">
-                          {t.role}, {t.business}
-                        </p>
+                        <p className="text-xs text-[var(--muted-foreground)]">{t.role}, {t.business}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -697,43 +485,59 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ParallaxDivider scrollY={scrollY} variant="dots" />
-
       {/* ══════════ 8. CTA FINAL ══════════ */}
       <section className="px-4 py-20 sm:py-28">
         <AnimatedSection>
-          <div className="mx-auto max-w-4xl rounded-3xl bg-gradient-to-br from-[var(--primary)] to-blue-600 p-8 sm:p-16 text-center text-white shadow-2xl shadow-[var(--primary)]/20">
-            <h2 className="text-3xl sm:text-4xl font-bold">
+          <div className="relative mx-auto max-w-4xl rounded-3xl bg-gradient-to-br from-[var(--primary)] to-blue-600 p-8 sm:p-16 text-center text-white shadow-2xl shadow-[var(--primary)]/20 overflow-hidden">
+            {/* Subtle animated glow inside CTA */}
+            <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-white/10 blur-3xl animate-[drift_15s_ease-in-out_infinite]" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-white/5 blur-2xl animate-[drift_18s_ease-in-out_infinite_reverse]" />
+
+            <h2 className="relative text-3xl sm:text-4xl font-bold">
               Pronto para transformar seu negocio?
             </h2>
-            <p className="mt-4 text-lg opacity-90 max-w-xl mx-auto">
+            <p className="relative mt-4 text-lg opacity-90 max-w-xl mx-auto">
               Crie sua conta gratis em menos de 2 minutos e comece a receber agendamentos hoje.
             </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="relative mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/register?role=ADMIN">
-                <Button size="lg" className="w-full sm:w-auto text-base h-14 px-8 rounded-full bg-white text-[var(--primary)] hover:bg-white/90 shadow-lg">
+                <Button size="lg" className="w-full sm:w-auto text-base h-14 px-8 rounded-full bg-white text-[var(--primary)] hover:bg-white/90 hover:scale-105 shadow-lg transition-all">
                   Sou Dono de Negocio
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
               <Link href="/register?role=CLIENT">
-                <Button size="lg" className="w-full sm:w-auto text-base h-14 px-8 rounded-full bg-white/20 text-white border-2 border-white/50 hover:bg-white/30 backdrop-blur">
+                <Button size="lg" className="w-full sm:w-auto text-base h-14 px-8 rounded-full bg-white/20 text-white border-2 border-white/50 hover:bg-white/30 hover:scale-105 backdrop-blur transition-all">
                   Sou Cliente
                 </Button>
               </Link>
             </div>
-            <p className="mt-6 text-sm opacity-70">
+            <p className="relative mt-6 text-sm opacity-70">
               Sem cartao de credito. Sem compromisso. Cancele quando quiser.
             </p>
           </div>
         </AnimatedSection>
       </section>
 
-      {/* Float animation keyframe */}
+      {/* CSS Animations - GPU accelerated, no JS scroll listeners */}
       <style jsx global>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
+          50% { transform: translateY(-12px); }
+        }
+        @keyframes drift {
+          0%, 100% { transform: translate(0, 0); }
+          25% { transform: translate(30px, -20px); }
+          50% { transform: translate(-20px, 15px); }
+          75% { transform: translate(15px, 25px); }
+        }
+        @keyframes fadeSlideUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 0.5; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.1); }
         }
       `}</style>
     </div>
