@@ -1,0 +1,20 @@
+{
+  "name": "agendapro",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Plataforma de agendamento online para diversos tipos de negócios",
+  "scripts": {
+    "dev": "pnpm --parallel --filter './apps/*' run dev",
+    "build": "pnpm db:generate && pnpm --parallel --filter './apps/*' run build",
+    "lint": "pnpm --parallel --filter './apps/*' --filter './packages/*' run lint",
+    "type-check": "pnpm --parallel --filter './apps/*' run type-check",
+    "db:generate": "pnpm --filter @agendapro/database prisma generate",
+    "db:migrate": "pnpm --filter @agendapro/database prisma migrate dev",
+    "db:seed": "pnpm --filter @agendapro/database prisma db seed",
+    "db:studio": "pnpm --filter @agendapro/database prisma studio"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  }
+}
