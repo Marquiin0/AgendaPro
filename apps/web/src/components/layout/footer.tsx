@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Calendar } from 'lucide-react';
 
 export function Footer() {
@@ -9,9 +10,18 @@ export function Footer() {
             <Calendar className="h-4 w-4" />
             <span>AgendaPro</span>
           </div>
-          <p className="text-sm text-[var(--muted-foreground)]">
-            &copy; {new Date().getFullYear()} AgendaPro. Todos os direitos reservados.
-          </p>
+
+          <div className="flex flex-col items-center gap-3 text-center sm:items-end sm:text-right">
+            <Link
+              href="/terms"
+              className="text-sm font-medium text-[var(--primary)] underline underline-offset-4"
+            >
+              Termos e Condições
+            </Link>
+            <p className="text-sm text-[var(--muted-foreground)]">
+              &copy; {new Date().getFullYear()} AgendaPro. Todos os direitos reservados.
+            </p>
+          </div>
         </div>
       </div>
     </footer>

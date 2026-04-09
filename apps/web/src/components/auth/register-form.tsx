@@ -50,6 +50,7 @@ export function RegisterForm() {
     password: '',
     confirmPassword: '',
     role: defaultRole,
+    acceptTerms: false,
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -59,7 +60,12 @@ export function RegisterForm() {
   const passwordStrength = useMemo(() => getPasswordStrength(formData.password), [formData.password]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, type, value, checked } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
   }
 
   function handlePhoneChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -76,6 +82,11 @@ export function RegisterForm() {
       return;
     }
 
+    if (!formData.acceptTerms) {
+      setError('Você precisa aceitar os termos e condições');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -89,6 +100,7 @@ export function RegisterForm() {
           phone: unmaskDigits(formData.phone) || undefined,
           password: formData.password,
           role: formData.role,
+          acceptTerms: formData.acceptTerms,
         }),
       });
 
@@ -286,6 +298,32 @@ export function RegisterForm() {
               <p className="text-xs text-red-500 mt-1">As senhas não coincidem</p>
             )}
           </div>
+
+          <label
+            htmlFor="acceptTerms"
+            className="flex items-start gap-3 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4 text-sm leading-relaxed cursor-pointer"
+          >
+            <input
+              id="acceptTerms"
+              name="acceptTerms"
+              type="checkbox"
+              checked={formData.acceptTerms}
+              onChange={handleChange}
+              className="mt-1 h-4 w-4 shrink-0 rounded border-[var(--border)] text-[var(--primary)] focus:ring-[var(--primary)]"
+            />
+            <span className="text-[var(--muted-foreground)]">
+              Eu li e aceito os{' '}
+              <Link
+                href="/terms"
+                target="_blank"
+                className="font-medium text-[var(--primary)] underline underline-offset-4"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Termos e Condições
+              </Link>
+              {' '}do AgendaPro.
+            </span>
+          </label>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
           <Button type="submit" className="w-full" disabled={loading}>

@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import { Equals, IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 import { UserRole } from '@agendapro/database';
 
 export class RegisterDto {
@@ -24,4 +24,8 @@ export class RegisterDto {
   @IsOptional()
   @IsEnum(UserRole)
   role?: UserRole;
+
+  @IsBoolean()
+  @Equals(true, { message: 'É necessário aceitar os termos e condições' })
+  acceptTerms: boolean;
 }
