@@ -4,6 +4,7 @@ import './globals.css';
 import { AuthProvider } from '@/providers/auth-provider';
 import { QueryProvider } from '@/providers/query-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
+import { SmoothScrollProvider } from '@/components/motion/smooth-scroll-provider';
 import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 
@@ -25,11 +26,13 @@ export default function RootLayout({
         <ThemeProvider>
         <AuthProvider>
           <QueryProvider>
-            <div className="flex min-h-screen flex-col">
-              <Navbar />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
+            <SmoothScrollProvider>
+              <div className="flex min-h-screen flex-col">
+                <Navbar />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </div>
+            </SmoothScrollProvider>
           </QueryProvider>
         </AuthProvider>
         </ThemeProvider>

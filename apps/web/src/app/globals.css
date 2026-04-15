@@ -57,3 +57,25 @@
     @apply bg-[var(--background)] text-[var(--foreground)];
   }
 }
+
+/* Marquee animation for trust bar */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-100% / 3)); }
+}
+
+/* Glass surface utility */
+.glass-surface {
+  background: color-mix(in oklch, var(--card) 60%, transparent);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid color-mix(in oklch, var(--border) 30%, transparent);
+}
+
+/* Gradient text utility — white to muted vertical fade (refractweb) */
+.gradient-text {
+  background: linear-gradient(180deg, var(--foreground) 0%, var(--muted-foreground) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
